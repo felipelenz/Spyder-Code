@@ -9,17 +9,31 @@ from pylab import show, ginput, plot
 import matplotlib.pyplot as plt
 
 def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
+    fig=plt.figure()
+    ax=fig.add_subplot(111)
     
-    plot(x,y)
-    print("Please click")
-    xx = ginput(3)
-    print("clicked",xx)
+    
+    ax.plot(x,y)
+    temp=[]
+    
+    def onclick(event):
+        print('I pressed g')
+        if event.key == "g":
+            xx = ginput(3)    
+            temp.append(xx)
+    cid = fig.canvas.mpl_connect('key_press_event', onclick)
+
+    show()
+#    print("Please click")
+
+    xx = temp[0]
+#    print(temp)
+#    print("clicked",xx)
     sampling_time=1/fs
     t0_noise=np.int(xx[0][0]/sampling_time)-t0/sampling_time
     tf_noise=np.int(xx[1][0]/sampling_time)-t0/sampling_time
     t_end=np.int(xx[2][0]/sampling_time)-t0/sampling_time
-    print(t0_noise,tf_noise)
-    show() 
+#    print(t0_noise,tf_noise)
     
     t_max=np.argmax(y[0:t_end]) #because we shift everything to the left using t0=pretrigger, this calculates the peak from 0 to the 3rd ginput point
     y_topeak=y[0:t_max]
@@ -31,7 +45,7 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
     min_ampl=y_topeak[min_ind]
     max_ampl=np.max(y_topeak)
     y_ampl=max_ampl-min_ampl
-    print(sigma,min_ampl,max_ampl,y_ampl)
+#    print(sigma,min_ampl,max_ampl,y_ampl)
    
     ten_percent_ind=np.argmax(np.abs(1.0/((0.1*y_ampl+min_ampl)-y_topeak)))  
     twenty_percent_ind=np.argmax(np.abs(1.0/((0.2*y_ampl+min_ampl)-y_topeak))) 
@@ -40,9 +54,9 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
     ninety_percent_ind=np.argmax(np.abs(1.0/((0.9*y_ampl+min_ampl)-y_topeak))) 
     risetime_10_90=(ninety_percent_ind-ten_percent_ind)/fs
     
-    print("10",ten_percent_ind)    
+#    print("10",ten_percent_ind)    
     
-    print("standard deviation= %r noise mean= %r"%(sigma,mean))
+#    print("standard deviation= %r noise mean= %r"%(sigma,mean))
     plot(x,y, 'b', \
     x[t0_noise:tf_noise],y[t0_noise:tf_noise], 'g', \
     [x[0],x[-1]],[mean,mean], 'r', \
