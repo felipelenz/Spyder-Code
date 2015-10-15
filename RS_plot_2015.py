@@ -7,17 +7,17 @@ import matplotlib.pyplot as plt
 from noise_analysis import noise_analysis
 
 date=82715
-seg=0
-RS_number=1
-t0=0
-event=43
-suffix26=5 #lecroy last digit og the .trc file name
-suffix41=5 #yoko Last digit of the .wvf file name
-suffix42=5 #lecroy last digit og the .trc file name
-suffix43=5 #lecroy last digit og the .trc file name
-suffix44=5 #lecroy last digit og the .trc file name
-suffix48=5 #lecroy last digit og the .trc file name
-suffix50=5 #lecroy last digit og the .trc file name
+seg=2
+RS_number=3
+t0=0.345278
+event=42
+suffix26=4 #lecroy last digit og the .trc file name
+suffix41=4 #yoko Last digit of the .wvf file name
+suffix42=4 #lecroy last digit og the .trc file name
+suffix43=4 #lecroy last digit og the .trc file name
+suffix44=4 #lecroy last digit og the .trc file name
+suffix48=4 #lecroy last digit og the .trc file name
+suffix50=4 #lecroy last digit og the .trc file name
 offset=0.05
 duplicate_delay=0
 
@@ -242,7 +242,6 @@ plt.show()
 
 #!!!!!!!!!!!!!!!CHANNEL-BASE CURRENT AND LUMINOSITY!!!!!!!!!!!!!!!!!!!!!!!!!!
 c=2.99e8 #speed of light
-
 #Put t=0 at max peak current
 shift_to_t_equals_zero=(np.argmax(segments_IIHI[seg][::dt2]))/500e6 - lecroy_pretrigger/2 # scope26 sampling rate is 500 MHz
 
@@ -256,7 +255,7 @@ current_launcher_time_delay=10.2/c #from launcher tip to current shunt
 fiber_delay=1350e-9 #From 2013 time delay spreadsheet
 current_time_delay=current_launcher_time_delay+fiber_delay-shift_to_t_equals_zero #total current delay
 
- #sintax for plotyy: Plot simulteneously measured current and luminosity
+#sintax for plotyy: Plot simulteneously measured current and luminosity
 fig,ax1=plt.subplots()
 ax2=ax1.twinx()
 ax1.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger-APD1_time_delay)*1e6, segments_Scope43_APD1[seg][::dt2]/np.max(segments_Scope43_APD1[seg][::dt2]),color='r',linewidth=2,label="D1# F (4 m)")
@@ -284,7 +283,7 @@ APD1_percentage_points=noise_analysis((seg_time_Scope43_APD1[::dt2]-lecroy_pretr
 Current_to_luminosity_delay_10p=(APD1_percentage_points[0]/100e6-lecroy_pretrigger/2-APD1_time_delay)-(IIHI_percentage_points[0]/500e6-current_time_delay)
 Current_to_luminosity_delay_20p=(APD1_percentage_points[1]/100e6-lecroy_pretrigger/2-APD1_time_delay)-(IIHI_percentage_points[1]/500e6-current_time_delay)
 Current_to_luminosity_delay_50p=(APD1_percentage_points[2]/100e6-lecroy_pretrigger/2-APD1_time_delay)-(IIHI_percentage_points[2]/500e6-current_time_delay)
-print("2015 APD: Current risetime = %r, Luminosity Risetime = %r" %(IIHI_percentage_points[5],APD1_percentage_points[5]))
+print("2015 APD (D1): Current risetime = %r, Luminosity Risetime = %r" %(IIHI_percentage_points[5],APD1_percentage_points[5]))
 print("current-to-luminosity delay at 10p = %r, 20p = %r, 50p = %r" %(Current_to_luminosity_delay_10p,Current_to_luminosity_delay_20p,Current_to_luminosity_delay_20p))
 
 #2014 APD
@@ -293,8 +292,52 @@ APD2_percentage_points=noise_analysis((seg_time_Scope43_APD2[::dt2]-lecroy_pretr
 Current_to_luminosity_delay_10p=(APD2_percentage_points[0]/100e6-lecroy_pretrigger/2-APD1_time_delay)-(IIHI_percentage_points[0]/500e6-current_time_delay)
 Current_to_luminosity_delay_20p=(APD2_percentage_points[1]/100e6-lecroy_pretrigger/2-APD1_time_delay)-(IIHI_percentage_points[1]/500e6-current_time_delay)
 Current_to_luminosity_delay_50p=(APD2_percentage_points[2]/100e6-lecroy_pretrigger/2-APD1_time_delay)-(IIHI_percentage_points[2]/500e6-current_time_delay)
-print("2015 APD: Current risetime = %r, Luminosity Risetime = %r" %(IIHI_percentage_points[5],APD2_percentage_points[5]))
+print("2014 APD (D2): Current risetime = %r, Luminosity Risetime = %r" %(IIHI_percentage_points[5],APD2_percentage_points[5]))
 print("current-to-luminosity delay at 10p = %r, 20p = %r, 50p = %r" %(Current_to_luminosity_delay_10p,Current_to_luminosity_delay_20p,Current_to_luminosity_delay_20p))
+
+#Calculate Upward return stroke speed
+#Lecroy
+
+def allspeeds(x1,y1,x2,y2,fs,t0,z1,z2):
+    
+    sampling_time=1/fs
+    x1_10p, x1_20p, x1_50p, x1_80p, x1_90p, x1_RT=noise_analysis(x1,y1,100e6,t0)
+    t_10p_x1=x1_10p*sampling_time
+    t_20p_x1=x1_20p*sampling_time
+    t_50p_x1=x1_50p*sampling_time
+    t_80p_x1=x1_80p*sampling_time
+    t_90p_x1=x1_90p*sampling_time
+    
+    x2_10p, x2_20p, x2_50p, x2_80p, x2_90p, x2_RT=noise_analysis(x2,y2,100e6,t0)
+    t_10p_x2=x2_10p*sampling_time
+    t_20p_x2=x2_20p*sampling_time
+    t_50p_x2=x2_50p*sampling_time
+    t_80p_x2=x2_80p*sampling_time
+    t_90p_x2=x2_90p*sampling_time
+
+
+    v_10p=(z1-z2)/(t_10p_x1-t_10p_x2)
+    print("upward RS speed (measured at 10%%) = %r" %(v_10p))
+    
+    v_20p=(z1-z2)/(t_20p_x1-t_20p_x2)
+    print("upward RS speed (measured at 20%%) = %r" %(v_20p))
+    
+    v_50p=(z1-z2)/(t_50p_x1-t_50p_x2)
+    print("upward RS speed (measured at 50%%) = %r" %(v_50p))
+    
+    v_80p=(z1-z2)/(t_80p_x1-t_80p_x2)
+    print("upward RS speed (measured at 80%%) = %r" %(v_80p))
+    
+    v_90p=(z1-z2)/(t_90p_x1-t_90p_x2)
+    print("upward RS speed (measured at 90%%) = %r" %(v_90p))
+
+#bottom 300 m speed
+allspeeds(seg_time_Scope42_APD20,segments_Scope42_APD20[seg], \
+            seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,0,300,4)
+##bottom 1km to 400 m speed
+allspeeds(APD_32.dataTime,APD_32.data, \
+        APD_21.dataTime,APD_21.data, 100e6,t0,1000,400)
+
 
 #!!!!!!!!!!!!!!!!Compare 2014 and 2015 diodes looking at the same channel height!!!!!!!!!!!!!!!!!!
 plt.subplot(431)
@@ -408,45 +451,3 @@ plt.xlim([-20,200])
 plt.title('D2* and D1# F 4 m')
 plt.grid()
 plt.show()
-
-def allspeeds(x1,y1,x2,y2,fs,t0):
-    
-    c=2.99e8
-    sampling_time=1/fs
-    x1_10p, x1_20p, x1_50p, x1_80p, x1_90p, x1_RT=noise_analysis(x1,y1,100e6,t0)
-    t_10p_x1=x1_10p*sampling_time
-    t_20p_x1=x1_20p*sampling_time
-    t_50p_x1=x1_50p*sampling_time
-    t_80p_x1=x1_80p*sampling_time
-    t_90p_x1=x1_90p*sampling_time
-    
-    x2_10p, x2_20p, x2_50p, x2_80p, x2_90p, x2_RT=noise_analysis(x2,y2,100e6,t0)
-    t_10p_x2=x2_10p*sampling_time
-    t_20p_x2=x2_20p*sampling_time
-    t_50p_x2=x2_50p*sampling_time
-    t_80p_x2=x2_80p*sampling_time
-    t_90p_x2=x2_90p*sampling_time
-
-
-    v_10p=(1000-400)/(t_10p_x1-t_10p_x2)
-    print("downward speed (measured at 10%%) = %.2fc" %(v_10p/c))
-    
-    v_20p=(1000-400)/(t_20p_x1-t_20p_x2)
-    print("downward speed (measured at 20%%) = %.2fc" %(v_20p/c))
-    
-    v_50p=(1000-400)/(t_50p_x1-t_50p_x2)
-    print("downward speed (measured at 50%%) = %.2fc" %(v_50p/c))
-    
-    v_80p=(1000-400)/(t_80p_x1-t_80p_x2)
-    print("downward speed (measured at 80%%) = %.2fc" %(v_80p/c))
-    
-    v_90p=(1000-400)/(t_90p_x1-t_90p_x2)
-    print("downward speed (measured at 90%%) = %.2fc" %(v_90p/c))
-
-##bottom 1km to 400 m speed
-allspeeds(APD_32.dataTime,APD_32.data, \
-        APD_21.dataTime,APD_21.data, 100e6,t0)
-
-#bottom 300 m speed
-allspeeds(seg_time_Scope42_APD20,segments_Scope42_APD20[seg], \
-            seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,0)
