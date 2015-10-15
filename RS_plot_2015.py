@@ -298,9 +298,9 @@ plt.show()
 #Measure Current-to-luminosity delay at 20%
 IIHI_percentage_points=noise_analysis((seg_time_IIHI[::dt2]-lecroy_pretrigger/2-current_time_delay),segments_IIHI[seg][::dt2],500e6,lecroy_pretrigger/2)
 APD1_percentage_points=noise_analysis((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger-APD1_time_delay),segments_Scope43_APD1[seg][::dt2],100e6,lecroy_pretrigger)
-Current_to_luminosity_delay_10p=APD1_percentage_points[0]/100e6-IIHI_percentage_points[0]/500e6
-Current_to_luminosity_delay_20p=APD1_percentage_points[1]/100e6-IIHI_percentage_points[1]/500e6
-Current_to_luminosity_delay_50p=APD1_percentage_points[2]/100e6-IIHI_percentage_points[2]/500e6
+Current_to_luminosity_delay_10p=(APD1_percentage_points[0]/100e6-IIHI_percentage_points[0]/500e6)-lecroy_pretrigger/2
+Current_to_luminosity_delay_20p=(APD1_percentage_points[1]/100e6-IIHI_percentage_points[1]/500e6)-lecroy_pretrigger/2
+Current_to_luminosity_delay_50p=(APD1_percentage_points[2]/100e6-IIHI_percentage_points[2]/500e6)-lecroy_pretrigger/2
 print("current-to-luminosity delay at 10p = %r, 20p = %r, 50p = %r" %(Current_to_luminosity_delay_10p,Current_to_luminosity_delay_20p,Current_to_luminosity_delay_20p))
 
 #Compare 2014 and 2015 diodes looking at the same channel height
