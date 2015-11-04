@@ -8,16 +8,16 @@ from noise_analysis import noise_analysis
 
 date=82715
 seg=2
-RS_number=3
-t0=0.451656
-event=43
-suffix26=5#lecroy last digit og the .trc file name
-suffix41=5 #yoko Last digit of the .wvf file name
-suffix42=5 #lecroy last digit og the .trc file name
-suffix43=5 #lecroy last digit og the .trc file name
-suffix44=5 #lecroy last digit og the .trc file name
-suffix48=5 #lecroy last digit og the .trc file name
-suffix50=5 #lecroy last digit og the .trc file name
+RS_number=4
+t0=0.093027
+vent=39
+suffix26=1#lecroy last digit og the .trc file name
+suffix41=1 #yoko Last digit of the .wvf file name
+suffix42=1 #lecroy last digit og the .trc file name
+suffix43=1 #lecroy last digit og the .trc file name
+suffix44=1 #lecroy last digit og the .trc file name
+suffix48=1 #lecroy last digit og the .trc file name
+suffix50=1 #lecroy last digit og the .trc file name
 offset=0.5
 duplicate_delay=0
 
@@ -300,23 +300,11 @@ APD_20=f.get_trace_data(header,13,t0,tf)
 
 def allspeeds(x1,y1,x2,y2,fs1,fs2,t0,z1,z2,t_IRIG):
     
-    sampling_time1=1/fs1
-    x1_10p, x1_20p, x1_50p, x1_80p, x1_90p, x1_RT=noise_analysis(x1,y1,fs1,t0)
-    t_10p_x1=x1_10p*sampling_time1
-    t_20p_x1=x1_20p*sampling_time1
-    t_50p_x1=x1_50p*sampling_time1
-    t_80p_x1=x1_80p*sampling_time1
-    t_90p_x1=x1_90p*sampling_time1
+    t_10p_x1, t_20p_x1, t_50p_x1, t_80p_x1, t_90p_x1, x1_RT=noise_analysis(x1,y1,fs1,t0)
+    print("waveform 1 10-90%% risetime=",x1_RT)
+    t_10p_x2, t_20p_x2, t_50p_x2, t_80p_x2, t_90p_x2, x2_RT=noise_analysis(x2,y2,fs2,t0)
+    print("waveform 2 10-90%% risetime=",x2_RT)
     
-    sampling_time2=1/fs2
-    x2_10p, x2_20p, x2_50p, x2_80p, x2_90p, x2_RT=noise_analysis(x2,y2,fs2,t0)
-    t_10p_x2=x2_10p*sampling_time2
-    t_20p_x2=x2_20p*sampling_time2
-    t_50p_x2=x2_50p*sampling_time2
-    t_80p_x2=x2_80p*sampling_time2
-    t_90p_x2=x2_90p*sampling_time2
-
-
     v_10p=(z1-z2)/(t_10p_x1+t_IRIG-t_10p_x2)
     print("upward RS speed (measured at 10%%) = %r" %(v_10p))
     
@@ -332,64 +320,56 @@ def allspeeds(x1,y1,x2,y2,fs1,fs2,t0,z1,z2,t_IRIG):
     v_90p=(z1-z2)/(t_90p_x1+t_IRIG-t_90p_x2)
     print("upward RS speed (measured at 90%%) = %r" %(v_90p))
 
-#Diode 1 (4 m) to Diode 9 (44 m) speed
+##For M-Components, uncomment the moving average data! 
+#########################
+# Moving Average Filter #
+#########################
+def movingaverage(interval, window_size):
+    window= np.ones(int(window_size))/float(window_size)
+    return np.convolve(interval, window, 'same')
+
+##Diode 1 (4 m) to Diode 9 (44 m) speed        
+#segments_Scope48_APD9[seg]=movingaverage(segments_Scope48_APD9[seg],100)
+#seg_time_Scope48_APD9=movingaverage(seg_time_Scope48_APD9,100)
+#
+#segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
+#seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
+
 allspeeds(seg_time_Scope48_APD9,segments_Scope48_APD9[seg], \
         seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,44,4,0)
             
-##Diode 3 (7 m) to Diode 4 (14 m) speed
-#allspeeds(seg_time_Scope43_APD4,segments_Scope43_APD4[seg], \
-#            seg_time_Scope43_APD3,segments_Scope43_APD3[seg],100e6,0,14,7,0)
-#            
-##Diode 4 (14 m) to Diode 6 (24 m) speed
-#allspeeds(seg_time_Scope44_APD6,segments_Scope44_APD6[seg], \
-#            seg_time_Scope43_APD4,segments_Scope43_APD4[seg],100e6,0,24,14,0)
 #
-##Diode 6 (24 m) to Diode 7 (34 m) speed
-#allspeeds(seg_time_Scope44_APD7,segments_Scope44_APD7[seg], \
-#            seg_time_Scope44_APD6,segments_Scope44_APD6[seg],100e6,0,34,24,0)
-#
-##Diode 7 (34 m) to Diode 9 (44 m) speed
-#allspeeds(seg_time_Scope48_APD9,segments_Scope48_APD9[seg], \
-#            seg_time_Scope44_APD7,segments_Scope44_APD7[seg],100e6,0,44,34,0)
-            
-#Diode 9 (44 m) to Diode 14 (94 m) speed
+##Diode 9 (44 m) to Diode 14 (94 m) speed
+#segments_Scope50_APD14[seg]=movingaverage(segments_Scope50_APD14[seg],100)
+#seg_time_Scope50_APD14=movingaverage(seg_time_Scope50_APD14,100)
+# 
 allspeeds(seg_time_Scope50_APD14,segments_Scope50_APD14[seg], \
             seg_time_Scope48_APD9,segments_Scope48_APD9[seg],100e6,100e6,0,94,44,0)
 
-##Diode 10 (54 m) to Diode 12 (64 m) speed
-#allspeeds(seg_time_Scope48_APD12,segments_Scope48_APD12[seg], \
-#            seg_time_Scope48_APD10,segments_Scope48_APD10[seg],100e6,0,64,54,0)
-#            
-##Diode 12 (64 m) to Diode 13 (74 m) speed
-#allspeeds(seg_time_Scope50_APD13,segments_Scope50_APD13[seg], \
-#            seg_time_Scope48_APD12,segments_Scope48_APD12[seg],100e6,0,74,64,0)
-#
-##Diode 13 (74 m) to Diode 14 (94 m) speed
-#allspeeds(seg_time_Scope50_APD14,segments_Scope50_APD14[seg], \
-#            seg_time_Scope50_APD13,segments_Scope50_APD13[seg],100e6,0,94,74,0)
-            
-#Diode 14 (94 m) to Diode 17 (200 m) speed
+##Diode 14 (94 m) to Diode 17 (200 m) speed
+#segments_Scope42_APD17[seg]=movingaverage(segments_Scope42_APD17[seg],100)
+#seg_time_Scope42_APD17=movingaverage(seg_time_Scope42_APD17,100)
+
 allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
             seg_time_Scope50_APD14,segments_Scope50_APD14[seg],100e6,100e6,0,200,94,0)
 
-##Diode 16 (154 m) to Diode 17 (200 m) speed
-#allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
-#            seg_time_Scope50_APD16,segments_Scope50_APD16[seg],100e6,0,200,154,0)
+##Diode 21 400 m Diode 25 (600 m) speed
+#APD_25.data=movingaverage(APD_25.data,100)
+#APD_25.dataTime=movingaverage(APD_25.dataTime,100)
 #
-##Diode 17 (200 m) to Diode 19 (300 m) speed
-#allspeeds(seg_time_Scope42_APD19,segments_Scope42_APD19[seg], \
-#            seg_time_Scope42_APD17,segments_Scope42_APD17[seg],100e6,0,300,200,0)
-#
-##bottom 300 m speed
-#allspeeds(seg_time_Scope42_APD20,segments_Scope42_APD20[seg], \
-#            seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,0,300,4,0)
-#Diode 21 400 m Diode 25 (600 m) speed
+#APD_21.data=movingaverage(APD_21.data,100)
+#APD_21.dataTime=movingaverage(APD_21.dataTime,100)  
+
 allspeeds(APD_25.dataTime,APD_25.data, \
         APD_21.dataTime,APD_21.data,100e6,100e6,t0,600,400,duplicate_delay)
 
-#Diode 25 (600 m) to Diode 32 (1 km) speed
+##Diode 25 (600 m) to Diode 32 (1 km) speed
+#APD_32.data=movingaverage(APD_32.data,100)
+#APD_32.dataTime=movingaverage(APD_32.dataTime,100)
+
 allspeeds(APD_32.dataTime,APD_32.data, \
         APD_25.dataTime,APD_25.data,100e6,100e6,t0,1000,600,duplicate_delay)
+
 
 #!!!!!!!!!!!!!!!!Compare 2014 and 2015 diodes looking at the same channel height!!!!!!!!!!!!!!!!!!
 plt.subplot(431)
