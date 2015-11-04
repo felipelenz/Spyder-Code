@@ -37,8 +37,6 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
     
     t_max=np.argmax(y[0:t_end]) #because we shift everything to the left using t0=pretrigger, this calculates the peak from 0 to the 3rd ginput point
     y_topeak=y[t0_noise:t_max]
-    plt.plot(x[t0_noise:t_max],y_topeak)
-    show()
     noise_data_window=y[t0_noise:tf_noise]
     sigma=np.std(noise_data_window)
     mean=np.mean(noise_data_window)
@@ -75,6 +73,6 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
     ninety_percent_time=(ninety_percent_ind+t0_noise)*sampling_time
     risetime_10_90=(ninety_percent_time-ten_percent_time)
     
-    print("10%% time",ten_percent_time)
-    print("90%% time",twenty_percent_time)
+#    print("10%% time",ten_percent_time)
+#    print("90%% time",twenty_percent_time)
     return ten_percent_time,twenty_percent_time,fifty_percent_time,eighty_percent_time,ninety_percent_time,risetime_10_90
