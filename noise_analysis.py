@@ -35,7 +35,8 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
     t_end=np.int(xx[2][0]/sampling_time)-t0/sampling_time
 #    print(t0_noise,tf_noise)
     
-    t_max=np.argmax(y[0:t_end]) #because we shift everything to the left using t0=pretrigger, this calculates the peak from 0 to the 3rd ginput point
+    y_toend=y[t0_noise:t_end]
+    t_max=np.argmax(y_toend) + t0_noise #because we shift everything to the left using t0=pretrigger, this calculates the peak from 0 to the 3rd ginput point
     y_topeak=y[t0_noise:t_max]
     noise_data_window=y[t0_noise:tf_noise]
     sigma=np.std(noise_data_window)
@@ -58,11 +59,11 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
 #    print("90",ninety_percent_ind)
     
 #    print("standard deviation= %r noise mean= %r"%(sigma,mean))
-    plot(x[t0_noise:t_max],y_topeak, 'b', \
+    plot(x[t0_noise:t_end],y_toend, 'b', \
     x[t0_noise:tf_noise],y[t0_noise:tf_noise], 'g', \
-    [x[t0_noise],x[t_max]],[mean,mean], 'r', \
-    [x[t0_noise],x[t_max]],[mean+sigma,mean+sigma], '--r', \
-    [x[t0_noise],x[t_max]],[mean-sigma,mean-sigma], '--r', \
+    [x[t0_noise],x[t_end]],[mean,mean], 'r', \
+    [x[t0_noise],x[t_end]],[mean+sigma,mean+sigma], '--r', \
+    [x[t0_noise],x[t_end]],[mean-sigma,mean-sigma], '--r', \
     [x[min_ind]+t0_noise*sampling_time,x[ten_percent_ind]+t0_noise*sampling_time,x[ninety_percent_ind]+t0_noise*sampling_time],[y_topeak[min_ind],y_topeak[ten_percent_ind],y_topeak[ninety_percent_ind]], 'or')
     show()
     
