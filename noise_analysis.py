@@ -76,4 +76,4 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
     
 #    print("10%% time",ten_percent_time)
 #    print("90%% time",twenty_percent_time)
-    return ten_percent_time,twenty_percent_time,fifty_percent_time,eighty_percent_time,ninety_percent_time,risetime_10_90
+    return ten_percent_time,twenty_percent_time,fifty_percent_time,eighty_percent_time,ninety_percent_time,risetime_10_90,x[t0_noise:t_end],(y_toend-mean)

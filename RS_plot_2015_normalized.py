@@ -7,19 +7,19 @@ import matplotlib.pyplot as plt
 from noise_analysis import noise_analysis
 
 date=82715
-seg=2
-RS_number=4
-t0=0.093027
-vent=39
-suffix26=1#lecroy last digit og the .trc file name
-suffix41=1 #yoko Last digit of the .wvf file name
-suffix42=1 #lecroy last digit og the .trc file name
-suffix43=1 #lecroy last digit og the .trc file name
-suffix44=1 #lecroy last digit og the .trc file name
-suffix48=1 #lecroy last digit og the .trc file name
-suffix50=1 #lecroy last digit og the .trc file name
+seg=0
+RS_number=1
+t0=0
+vent=41
+suffix26=3#lecroy last digit og the .trc file name
+suffix41=3 #yoko Last digit of the .wvf file name
+suffix42=3 #lecroy last digit og the .trc file name
+suffix43=3 #lecroy last digit og the .trc file name
+suffix44=3 #lecroy last digit og the .trc file name
+suffix48=3 #lecroy last digit og the .trc file name
+suffix50=3 #lecroy last digit og the .trc file name
 offset=0.5
-duplicate_delay=0
+duplicate_delay=-0.35862e-6
 
 dt1=1
 dt2=1
@@ -189,9 +189,9 @@ APD_20=f.get_trace_data(header,13,t0,tf)
 #plt.plot((APD_22.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_22.data[::dt1]/np.max(APD_22.data[::dt1])+21*offset,color=[0.5517,0.6552,0.4828],linewidth=2)
 #plt.plot((APD_21.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_21.data[::dt1]/np.max(APD_21.data[::dt1])+20*offset,color=[0.5,1,0.5],linewidth=2)
 #
-#plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD20[seg][::dt2]/np.max(segments_Scope42_APD20[seg][::dt2])+19*offset,color=[0.5172,0.4483,0],linewidth=2)
-##plt.plot((lc[0]-lecroy_pretrigger)*1e3,segments_Scope42_APD20[seg][lc[0]]/APD_20lc_max+19*offset,'ro')
-#plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(APD_20.data[::dt1])+19*offset,color=[0.5,1,0.5],linewidth=2)
+plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD20[seg][::dt2]/np.max(segments_Scope42_APD20[seg][::dt2])+19*offset,color=[0.5172,0.4483,0],linewidth=2)
+#plt.plot((lc[0]-lecroy_pretrigger)*1e3,segments_Scope42_APD20[seg][lc[0]]/APD_20lc_max+19*offset,'ro')
+plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(APD_20.data[::dt1])+19*offset,color=[0.5,1,0.5],linewidth=2)
 ##plt.plot((yoko[0]-yoko_pretrigger)*1e3,APD_20.data[yoko[0]],'ro')
 #plt.plot((seg_time_Scope42_APD19[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD19[seg][::dt2]/np.max(segments_Scope42_APD19[seg][::dt2])+18*offset,color=[0.1379,0.1379,0.0345],linewidth=2)
 #plt.plot((seg_time_Scope42_APD18[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD18[seg][::dt2]/np.max(segments_Scope42_APD18[seg][::dt2])+17*offset,color=[1,0.7586,0.5172],linewidth=2)
@@ -329,47 +329,50 @@ def movingaverage(interval, window_size):
     return np.convolve(interval, window, 'same')
 
 ##Diode 1 (4 m) to Diode 9 (44 m) speed        
-#segments_Scope48_APD9[seg]=movingaverage(segments_Scope48_APD9[seg],100)
-#seg_time_Scope48_APD9=movingaverage(seg_time_Scope48_APD9,100)
-#
-#segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
-#seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
+segments_Scope48_APD9[seg]=movingaverage(segments_Scope48_APD9[seg],100)
+seg_time_Scope48_APD9=movingaverage(seg_time_Scope48_APD9,100)
+
+segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
+seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
 
 allspeeds(seg_time_Scope48_APD9,segments_Scope48_APD9[seg], \
         seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,44,4,0)
             
-#
-##Diode 9 (44 m) to Diode 14 (94 m) speed
-#segments_Scope50_APD14[seg]=movingaverage(segments_Scope50_APD14[seg],100)
-#seg_time_Scope50_APD14=movingaverage(seg_time_Scope50_APD14,100)
-# 
+
+#Diode 9 (44 m) to Diode 14 (94 m) speed
+segments_Scope50_APD14[seg]=movingaverage(segments_Scope50_APD14[seg],100)
+seg_time_Scope50_APD14=movingaverage(seg_time_Scope50_APD14,100)
+ 
 allspeeds(seg_time_Scope50_APD14,segments_Scope50_APD14[seg], \
             seg_time_Scope48_APD9,segments_Scope48_APD9[seg],100e6,100e6,0,94,44,0)
 
-##Diode 14 (94 m) to Diode 17 (200 m) speed
-#segments_Scope42_APD17[seg]=movingaverage(segments_Scope42_APD17[seg],100)
-#seg_time_Scope42_APD17=movingaverage(seg_time_Scope42_APD17,100)
+#Diode 14 (94 m) to Diode 17 (200 m) speed
+segments_Scope42_APD17[seg]=movingaverage(segments_Scope42_APD17[seg],100)
+seg_time_Scope42_APD17=movingaverage(seg_time_Scope42_APD17,100)
 
 allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
             seg_time_Scope50_APD14,segments_Scope50_APD14[seg],100e6,100e6,0,200,94,0)
 
-##Diode 21 400 m Diode 25 (600 m) speed
-#APD_25.data=movingaverage(APD_25.data,100)
-#APD_25.dataTime=movingaverage(APD_25.dataTime,100)
-#
-#APD_21.data=movingaverage(APD_21.data,100)
-#APD_21.dataTime=movingaverage(APD_21.dataTime,100)  
+#Diode 21 400 m Diode 25 (600 m) speed
+APD_25.data=movingaverage(APD_25.data,100)
+APD_25.dataTime=movingaverage(APD_25.dataTime,100)
+
+APD_21.data=movingaverage(APD_21.data,100)
+APD_21.dataTime=movingaverage(APD_21.dataTime,100)  
 
 allspeeds(APD_25.dataTime,APD_25.data, \
         APD_21.dataTime,APD_21.data,100e6,100e6,t0,600,400,duplicate_delay)
 
-##Diode 25 (600 m) to Diode 32 (1 km) speed
-#APD_32.data=movingaverage(APD_32.data,100)
-#APD_32.dataTime=movingaverage(APD_32.dataTime,100)
+#Diode 25 (600 m) to Diode 32 (1 km) speed
+APD_32.data=movingaverage(APD_32.data,100)
+APD_32.dataTime=movingaverage(APD_32.dataTime,100)
 
 allspeeds(APD_32.dataTime,APD_32.data, \
         APD_25.dataTime,APD_25.data,100e6,100e6,t0,1000,600,duplicate_delay)
 
+plt.plot((APD_32.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_32.data[::dt1]/np.max(APD_32.data[::dt1]),color=[0.8,0.8,0.3],linewidth=2)
+plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD1[seg][::dt2]/np.max(segments_Scope43_APD1[seg][::dt2]),color=[0, 0, 1],linewidth=2)
+plt.show()
 
 #!!!!!!!!!!!!!!!!Compare 2014 and 2015 diodes looking at the same channel height!!!!!!!!!!!!!!!!!!
 plt.subplot(431)
