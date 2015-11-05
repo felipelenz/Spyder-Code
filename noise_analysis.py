@@ -8,7 +8,7 @@ import numpy as np
 from pylab import show, ginput, plot
 import matplotlib.pyplot as plt
 
-def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
+def noise_analysis(x,y,fs,t0): #t0 is the pretrigger! 
     fig=plt.figure()
     ax=fig.add_subplot(111)
     
@@ -33,7 +33,7 @@ def noise_analysis(x,y,fs,t0): #t0 is the pretrigger!
     t0_noise=np.int(xx[0][0]/sampling_time)-t0/sampling_time
     tf_noise=np.int(xx[1][0]/sampling_time)-t0/sampling_time
     t_end=np.int(xx[2][0]/sampling_time)-t0/sampling_time
-#    print(t0_noise,tf_noise)
+    print(t0_noise,tf_noise)
     
     y_toend=y[t0_noise:t_end]
     t_max=np.argmax(y_toend) + t0_noise #because we shift everything to the left using t0=pretrigger, this calculates the peak from 0 to the 3rd ginput point
