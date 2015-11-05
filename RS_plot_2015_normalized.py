@@ -4,22 +4,26 @@ import Yoko750 as yk
 import lecroy as lc
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
+import matplotlib
 from noise_analysis import noise_analysis
+matplotlib.rcParams.update({'font.size': 20})
 
 date=82715
-seg=0
-RS_number=1
-t0=0
-vent=41
-suffix26=3#lecroy last digit og the .trc file name
-suffix41=3 #yoko Last digit of the .wvf file name
-suffix42=3 #lecroy last digit og the .trc file name
-suffix43=3 #lecroy last digit og the .trc file name
-suffix44=3 #lecroy last digit og the .trc file name
-suffix48=3 #lecroy last digit og the .trc file name
-suffix50=3 #lecroy last digit og the .trc file name
+seg=1
+RS_number=2
+M_comp_number=1
+t0=0.228686
+event=43
+suffix26=5 #lecroy last digit og the .trc file name
+suffix41=5 #yoko Last digit of the .wvf file name
+suffix42=5 #lecroy last digit og the .trc file name
+suffix43=5 #lecroy last digit og the .trc file name
+suffix44=5 #lecroy last digit og the .trc file name
+suffix48=5 #lecroy last digit og the .trc file name
+suffix50=5 #lecroy last digit og the .trc file name
 offset=0.5
-duplicate_delay=-0.35862e-6
+duplicate_delay=0#6.37252e-6
 
 dt1=1
 dt2=1
@@ -188,11 +192,9 @@ APD_20=f.get_trace_data(header,13,t0,tf)
 #plt.plot((APD_23.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_23.data[::dt1]/np.max(APD_23.data[::dt1])+22*offset,color=[0.9655,0.5173,0.0345],linewidth=2)
 #plt.plot((APD_22.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_22.data[::dt1]/np.max(APD_22.data[::dt1])+21*offset,color=[0.5517,0.6552,0.4828],linewidth=2)
 #plt.plot((APD_21.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_21.data[::dt1]/np.max(APD_21.data[::dt1])+20*offset,color=[0.5,1,0.5],linewidth=2)
-#
-plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD20[seg][::dt2]/np.max(segments_Scope42_APD20[seg][::dt2])+19*offset,color=[0.5172,0.4483,0],linewidth=2)
-#plt.plot((lc[0]-lecroy_pretrigger)*1e3,segments_Scope42_APD20[seg][lc[0]]/APD_20lc_max+19*offset,'ro')
-plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(APD_20.data[::dt1])+19*offset,color=[0.5,1,0.5],linewidth=2)
-##plt.plot((yoko[0]-yoko_pretrigger)*1e3,APD_20.data[yoko[0]],'ro')
+
+#plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD20[seg][::dt2]/np.max(segments_Scope42_APD20[seg][::dt2])+19*offset,color=[0.5172,0.4483,0],linewidth=2)
+##plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(APD_20.data[::dt1])+19*offset,color=[0.5,1,0.5],linewidth=2)
 #plt.plot((seg_time_Scope42_APD19[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD19[seg][::dt2]/np.max(segments_Scope42_APD19[seg][::dt2])+18*offset,color=[0.1379,0.1379,0.0345],linewidth=2)
 #plt.plot((seg_time_Scope42_APD18[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD18[seg][::dt2]/np.max(segments_Scope42_APD18[seg][::dt2])+17*offset,color=[1,0.7586,0.5172],linewidth=2)
 #plt.plot((seg_time_Scope42_APD17[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD17[seg][::dt2]/np.max(segments_Scope42_APD17[seg][::dt2])+16*offset,color=[0.9655,0.0690,0.3793],linewidth=2)
@@ -219,10 +221,10 @@ plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(
 #plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD1[seg][::dt2]/np.max(segments_Scope43_APD1[seg][::dt2])+0*offset,color=[0, 0, 1],linewidth=2)
 #
 #plt.plot((seg_time_IIHI[::dt2]-lecroy_pretrigger/2)*1e3, segments_IIHI[seg][::dt2]/np.max(segments_IIHI[seg][::dt2])-1*offset,color=[0.3, 0.3, 0.3],linewidth=2)
-#
+
 #plt.xlabel('Time (ms)')
 #plt.ylabel('Luminosity (digitizer volts)')
-#
+
 #plt.legend(['D32* NF (1 km)','D31# NF (1 km)','D30* F (900 m)', \
 #            'D29# F (900 m)','D28# NF (800 m)','D27* F (700 m)', \
 #            'D26# F (700 m)','D25# NF (600 m)','D24* F (500 m)', \
@@ -295,14 +297,22 @@ plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(
 #print("2014 APD (D2): Current risetime = %r, Luminosity Risetime = %r" %(IIHI_percentage_points[5],APD2_percentage_points[5]))
 #print("current-to-luminosity delay at 10p = %r, 20p = %r, 50p = %r" %(Current_to_luminosity_delay_10p,Current_to_luminosity_delay_20p,Current_to_luminosity_delay_20p))
 
-#Calculate Upward return stroke speed
+#!!!!!!!!!!!!!!!!!Calculate Upward return stroke speed/downward M-comp speed!!!!!!!!!!!!!!
 #Lecroy
+ofile=open('M-components.csv','w')
+mywriter=csv.writer(ofile)
+mywriter.writerow(['Event UF15-'+str(event)+' RS#'+str(RS_number)+' M-comp #'+str(M_comp_number)])
+mywriter.writerow(['Diode 2 to Diode 18 speed at 20%',\
+                   'Diode 2 to Diode 18 speed at 50%',\
+                   'Diode 2 to Diode 18 speed at 80%',\
+                   'Diode 18 10-90% risetime',\
+                   'Diode 2 10-90% risetime'])
 
 def allspeeds(x1,y1,x2,y2,fs1,fs2,t0,z1,z2,t_IRIG):
     
-    t_10p_x1, t_20p_x1, t_50p_x1, t_80p_x1, t_90p_x1, x1_RT=noise_analysis(x1,y1,fs1,t0)
+    t_10p_x1, t_20p_x1, t_50p_x1, t_80p_x1, t_90p_x1, x1_RT,xx1,yy1=noise_analysis(x1,y1,fs1,t0)
     print("waveform 1 10-90%% risetime=",x1_RT)
-    t_10p_x2, t_20p_x2, t_50p_x2, t_80p_x2, t_90p_x2, x2_RT=noise_analysis(x2,y2,fs2,t0)
+    t_10p_x2, t_20p_x2, t_50p_x2, t_80p_x2, t_90p_x2, x2_RT,xx2,yy2=noise_analysis(x2,y2,fs2,t0)
     print("waveform 2 10-90%% risetime=",x2_RT)
     
     v_10p=(z1-z2)/(t_10p_x1+t_IRIG-t_10p_x2)
@@ -319,170 +329,309 @@ def allspeeds(x1,y1,x2,y2,fs1,fs2,t0,z1,z2,t_IRIG):
     
     v_90p=(z1-z2)/(t_90p_x1+t_IRIG-t_90p_x2)
     print("upward RS speed (measured at 90%%) = %r" %(v_90p))
+    
+    mywriter.writerow([v_20p, v_50p, v_80p, x1_RT, x2_RT])
+    return xx1,yy1,xx2,yy2
+
 
 ##For M-Components, uncomment the moving average data! 
-#########################
-# Moving Average Filter #
-#########################
-def movingaverage(interval, window_size):
-    window= np.ones(int(window_size))/float(window_size)
-    return np.convolve(interval, window, 'same')
+##########################
+## Moving Average Filter #
+##########################
+#def movingaverage(interval, window_size):
+#    window= np.ones(int(window_size))/float(window_size)
+#    return np.convolve(interval, window, 'same')
 
-##Diode 1 (4 m) to Diode 9 (44 m) speed        
-segments_Scope48_APD9[seg]=movingaverage(segments_Scope48_APD9[seg],100)
-seg_time_Scope48_APD9=movingaverage(seg_time_Scope48_APD9,100)
+#!!!!!!!!!!APD 2014!!!!!!!!!!!!
+#D2 to D18
+waveforms=allspeeds(seg_time_Scope42_APD18,segments_Scope42_APD18[seg], \
+                    seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,200,4,duplicate_delay)
 
-segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
-seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
+plt.plot((waveforms[0])*1e3,waveforms[1])
+plt.plot((waveforms[2])*1e3,waveforms[3])
+plt.legend(['Diode 18 (200 m)','Diode 2 (4 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Uncalibrated M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
 
-allspeeds(seg_time_Scope48_APD9,segments_Scope48_APD9[seg], \
-        seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,44,4,0)
-            
+plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
+plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
+plt.legend(['Diode 18 (200 m)','Diode 2 (4 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Normalized M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
 
-#Diode 9 (44 m) to Diode 14 (94 m) speed
-segments_Scope50_APD14[seg]=movingaverage(segments_Scope50_APD14[seg],100)
-seg_time_Scope50_APD14=movingaverage(seg_time_Scope50_APD14,100)
- 
-allspeeds(seg_time_Scope50_APD14,segments_Scope50_APD14[seg], \
-            seg_time_Scope48_APD9,segments_Scope48_APD9[seg],100e6,100e6,0,94,44,0)
+#D22 to D32
+mywriter.writerow(['Diode 22 to Diode 32 speed at 20%',\
+                   'Diode 22 to Diode 32 speed at 50%',\
+                   'Diode 22 to Diode 32 speed at 80%',\
+                   'Diode 32 10-90% risetime',\
+                   'Diode 22 10-90% risetime'])
+#it is very important to include -t0 below, otherwise the noise analysis won't work
+waveforms=allspeeds(APD_32.dataTime-t0,APD_32.data, \
+                    APD_22.dataTime-t0,APD_22.data,100e6,100e6,0,1000,400,duplicate_delay)
 
-#Diode 14 (94 m) to Diode 17 (200 m) speed
-segments_Scope42_APD17[seg]=movingaverage(segments_Scope42_APD17[seg],100)
-seg_time_Scope42_APD17=movingaverage(seg_time_Scope42_APD17,100)
+plt.plot((waveforms[0])*1e3,waveforms[1])
+plt.plot((waveforms[2])*1e3,waveforms[3])
+plt.legend(['Diode 32 (1 km)','Diode 22 (400 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Uncalibrated M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
 
-allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
-            seg_time_Scope50_APD14,segments_Scope50_APD14[seg],100e6,100e6,0,200,94,0)
+plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
+plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
+plt.legend(['Diode 32 (1 km)','Diode 22 (400 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Normalized M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
 
-#Diode 21 400 m Diode 25 (600 m) speed
-APD_25.data=movingaverage(APD_25.data,100)
-APD_25.dataTime=movingaverage(APD_25.dataTime,100)
+#!!!!!!!!!!APD 2015!!!!!!!!!!!!
+#D1 to D17
+mywriter.writerow(['Diode 1 to Diode 17 speed at 20%',\
+                   'Diode 1 to Diode 17 speed at 50%',\
+                   'Diode 1 to Diode 17 speed at 80%',\
+                   'Diode 17 10-90% risetime',\
+                   'Diode 1 10-90% risetime'])
+waveforms=allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
+                    seg_time_Scope43_APD2,segments_Scope43_APD2[seg],100e6,100e6,0,200,4,duplicate_delay)
 
-APD_21.data=movingaverage(APD_21.data,100)
-APD_21.dataTime=movingaverage(APD_21.dataTime,100)  
+plt.plot((waveforms[0])*1e3,waveforms[1])
+plt.plot((waveforms[2])*1e3,waveforms[3])
+plt.legend(['Diode 17 (200 m)','Diode 1 (4 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Uncalibrated M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
 
-allspeeds(APD_25.dataTime,APD_25.data, \
-        APD_21.dataTime,APD_21.data,100e6,100e6,t0,600,400,duplicate_delay)
+plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
+plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
+plt.legend(['Diode 17 (200 m)','Diode 1 (4 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Normalized M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
 
-#Diode 25 (600 m) to Diode 32 (1 km) speed
-APD_32.data=movingaverage(APD_32.data,100)
-APD_32.dataTime=movingaverage(APD_32.dataTime,100)
+#D23 to D31
+mywriter.writerow(['Diode 23 to Diode 31 speed at 20%',\
+                   'Diode 23 to Diode 31 speed at 50%',\
+                   'Diode 23 to Diode 31 speed at 80%',\
+                   'Diode 31 10-90% risetime',\
+                   'Diode 23 10-90% risetime'])
+#it is very important to include -t0 below, otherwise the noise analysis won't work
+waveforms=allspeeds(APD_31.dataTime-t0,APD_31.data, \
+                    APD_23.dataTime-t0,APD_23.data,100e6,100e6,0,1000,500,duplicate_delay)
 
-allspeeds(APD_32.dataTime,APD_32.data, \
-        APD_25.dataTime,APD_25.data,100e6,100e6,t0,1000,600,duplicate_delay)
+plt.plot((waveforms[0])*1e3,waveforms[1])
+plt.plot((waveforms[2])*1e3,waveforms[3])
+plt.legend(['Diode 31 (1 km)','Diode 23 (500 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Uncalibrated M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
+
+plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
+plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
+plt.legend(['Diode 32 (1 km)','Diode 23 (4500 m)'], loc=0)
+plt.xlabel('Time (ms)')
+plt.ylabel('Normalized M-component Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.grid()
+plt.show()
+
+###Diode 1 (4 m) to Diode 9 (44 m) speed        
+#segments_Scope48_APD9[seg]=movingaverage(segments_Scope48_APD9[seg],100)
+#seg_time_Scope48_APD9=movingaverage(seg_time_Scope48_APD9,100)##Diode 1 (4 m) to Diode 32 (14k m) speed  
+#APD_32.data=movingaverage(APD_32.data,100)
+#APD_32.dataTime=movingaverage(APD_32.dataTime,100)
+#
+#segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
+#seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
+
+#
+#segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
+#seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
+#
+#allspeeds(seg_time_Scope48_APD9,segments_Scope48_APD9[seg], \
+#        seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,44,4,0)
+#   
+##Diode 9 (44 m) to Diode 14 (94 m) speed         
+#mywriter.writerow(['Diode 9 to Diode 14 speed at 20%',\
+#                   'Diode 9 to Diode 14 speed at 50%',\
+#                   'Diode 9 to Diode 14 speed at 80%',\
+#                   'Diode 14 10-90%% risetime',\
+#                   'Diode 9 10-90%% risetime'])
+#segments_Scope50_APD14[seg]=movingaverage(segments_Scope50_APD14[seg],100)
+#seg_time_Scope50_APD14=movingaverage(seg_time_Scope50_APD14,100)
+# 
+#allspeeds(seg_time_Scope50_APD14,segments_Scope50_APD14[seg], \
+#            seg_time_Scope48_APD9,segments_Scope48_APD9[seg],100e6,100e6,0,94,44,0)
+#            
+##Diode 14 (94 m) to Diode 17 (200 m) speed          
+#mywriter.writerow(['Diode 14 to Diode 17 speed at 20%',\
+#                   'Diode 14 to Diode 17 speed at 50%',\
+#                   'Diode 14 to Diode 17 speed at 80%',\
+#                   'Diode 17 10-90% risetime',\
+#                   'Diode 14 10-90% risetime'])
+#
+#segments_Scope42_APD17[seg]=movingaverage(segments_Scope42_APD17[seg],100)
+#seg_time_Scope42_APD17=movingaverage(seg_time_Scope42_APD17,100)
+#
+#allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
+#            seg_time_Scope50_APD14,segments_Scope50_APD14[seg],100e6,100e6,0,200,94,0)
+#
+##Diode 21 400 m Diode 25 (600 m) speed
+#mywriter.writerow(['Diode 21 to Diode 25 speed at 20%',\
+#                   'Diode 21 to Diode 25 speed at 50%',\
+#                   'Diode 21 to Diode 25 speed at 80%',\
+#                   'Diode 25 10-90% risetime',\
+#                   'Diode 21 10-90% risetime'])
+#APD_25.data=movingaverage(APD_25.data,100)
+#APD_25.dataTime=movingaverage(APD_25.dataTime,100)
+#
+#APD_21.data=movingaverage(APD_21.data,100)
+#APD_21.dataTime=movingaverage(APD_21.dataTime,100)  
+#
+#allspeeds(APD_25.dataTime,APD_25.data, \
+#        APD_21.dataTime,APD_21.data,100e6,100e6,t0,600,400,duplicate_delay)
+#
+##Diode 25 (600 m) to Diode 32 (1 km) speed
+#mywriter.writerow(['Diode 25 to Diode 32 speed at 20%',\
+#                   'Diode 25 to Diode 32 speed at 50%',\
+#                   'Diode 25 to Diode 32 speed at 80%',\
+#                   'Diode 32 10-90% risetime',\
+#                   'Diode 25 10-90% risetime'])
+#APD_32.data=movingaverage(APD_32.data,100)
+#APD_32.dataTime=movingaverage(APD_32.dataTime,100)
+#
+#allspeeds(APD_32.dataTime,APD_32.data, \
+#        APD_25.dataTime,APD_25.data,100e6,100e6,t0,1000,600,duplicate_delay)
 
 plt.plot((APD_32.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_32.data[::dt1]/np.max(APD_32.data[::dt1]),color=[0.8,0.8,0.3],linewidth=2)
 plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD1[seg][::dt2]/np.max(segments_Scope43_APD1[seg][::dt2]),color=[0, 0, 1],linewidth=2)
 plt.show()
 
-#!!!!!!!!!!!!!!!!Compare 2014 and 2015 diodes looking at the same channel height!!!!!!!!!!!!!!!!!!
-plt.subplot(431)
-MaxD32=np.max(APD_32.data[::dt1])
-MaxD31=np.max(APD_31.data[::dt1])
-plt.plot((APD_32.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_32.data[::dt1]/MaxD32,color=[0.8,0.8,0.3],linewidth=2)
-plt.plot((APD_31.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_31.data[::dt1]/MaxD31,color=[0.2414,0,0.1034],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D32* and D31# NF 1 km')
-plt.grid()
+##!!!!!!!!!!!!!!!!Compare 2014 and 2015 diodes looking at the same channel height!!!!!!!!!!!!!!!!!!
+#plt.subplot(431)
+#MaxD32=np.max(APD_32.data[::dt1])
+#MaxD31=np.max(APD_31.data[::dt1])
+#plt.plot((APD_32.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_32.data[::dt1]/MaxD32,color=[0.8,0.8,0.3],linewidth=2)
+#plt.plot((APD_31.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_31.data[::dt1]/MaxD31,color=[0.2414,0,0.1034],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D32* and D31# NF 1 km')
+#plt.grid()
+#
+#plt.subplot(432)
+#MaxD30=np.max(APD_30.data[::dt1])
+#MaxD29=np.max(APD_29.data[::dt1])
+#plt.plot((APD_30.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_30.data[::dt1]/MaxD30,color=[0.7241,0.3103,0.8276],linewidth=2)
+#plt.plot((APD_29.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_29.data[::dt1]/MaxD29,color=[0.8276,1,0],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D30* and D29# F 900 m')
+#plt.grid()
+#
+#plt.subplot(433)
+#MaxD27=np.max(APD_27.data[::dt1])
+#MaxD26=np.max(APD_26.data[::dt1])
+#plt.plot((APD_27.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_27.data[::dt1]/MaxD27,color=[0.4483,0.3793,0.4828],linewidth=2)
+#plt.plot((APD_26.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_26.data[::dt1]/MaxD26,color=[0.6207,0.7586,1],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D27* and D26# F 700 m')
+#plt.grid()
+#
+#plt.subplot(434)
+#MaxD24=np.max(APD_24.data[::dt1])
+#MaxD23=np.max(APD_23.data[::dt1])
+#plt.plot((APD_24.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_24.data[::dt1]/MaxD24,color=[0.5172,0.4483,0],linewidth=2)
+#plt.plot((APD_23.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_23.data[::dt1]/MaxD23,color=[0.9655,0.5173,0.0345],linewidth=2)
+#plt.xlim([-20,200])
+#plt.ylabel('Normalized Luminosity (digitizer volts)')
+#plt.title('D24* and D23# F 500 m')
+#plt.grid()
+#
+#
+#plt.subplot(435)
+#MaxD22=np.max(APD_22.data[::dt1])
+#MaxD21=np.max(APD_21.data[::dt1])
+#plt.plot((APD_22.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_22.data[::dt1]/MaxD22,color=[0.5517,0.6552,0.4828],linewidth=2)
+#plt.plot((APD_21.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_21.data[::dt1]/MaxD21,color=[0.5,1,0.5],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D22* and D21# NF 400 m')
+#plt.grid()
+#
+#plt.subplot(436)
+#MaxD20=np.max(segments_Scope42_APD20[seg])
+#MaxD19=np.max(segments_Scope42_APD19[seg])
+#plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD20[seg][::dt2]/MaxD20,color=[0.5172,0.4483,0],linewidth=2)
+#plt.plot((seg_time_Scope42_APD19[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD19[seg][::dt2]/MaxD19,color=[0.1379,0.1379,0.0345],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D20* and D19# F 300 m')
+#plt.grid()
+#
+#plt.subplot(437)
+#MaxD18=np.max(segments_Scope42_APD18[seg])
+#MaxD17=np.max(segments_Scope42_APD17[seg])
+#plt.plot((seg_time_Scope42_APD18[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD18[seg][::dt2]/MaxD18,color=[1,0.7586,0.5172],linewidth=2)
+#plt.plot((seg_time_Scope42_APD17[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD17[seg][::dt2]/MaxD17,color=[0.9655,0.0690,0.3793],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D18* and D17# F 200 m')
+#plt.grid()
+#
+#plt.subplot(438)
+#MaxD15=np.max(segments_Scope50_APD15[seg])
+#MaxD14=np.max(segments_Scope50_APD14[seg])
+#plt.plot((seg_time_Scope50_APD15[::dt2]-lecroy_pretrigger)*1e6, segments_Scope50_APD15[seg][::dt2]/MaxD15,color=[0.8276,0.0690,1],linewidth=2)
+#plt.plot((seg_time_Scope50_APD14[::dt2]-lecroy_pretrigger)*1e6, segments_Scope50_APD14[seg][::dt2]/MaxD14,color=[0.9655,0.6207,0.8621],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D15* and D14# F 94 m')
+#plt.grid()
+#
+#plt.subplot(439)
+#MaxD11=np.max(segments_Scope48_APD11[seg])
+#MaxD10=np.max(segments_Scope48_APD10[seg])
+#plt.plot((seg_time_Scope48_APD11[::dt2]-lecroy_pretrigger)*1e6, segments_Scope48_APD11[seg][::dt2]/MaxD11,color=[0,0.5172,0.5862],linewidth=2)
+#plt.plot((seg_time_Scope48_APD10[::dt2]-lecroy_pretrigger)*1e6, segments_Scope48_APD10[seg][::dt2]/MaxD10,color=[0,1,0.7586],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D11* and D10# F 54 m')
+#plt.grid()
+#
+#plt.subplot(4,3,10)
+#MaxD8=np.max(segments_Scope44_APD8[seg])
+#MaxD7=np.max(segments_Scope44_APD7[seg])
+#plt.plot((seg_time_Scope44_APD8[::dt2]-lecroy_pretrigger)*1e6, segments_Scope44_APD8[seg][::dt2]/MaxD8,color=[0.5172,0.5172,1],linewidth=2)
+#plt.plot((seg_time_Scope44_APD7[::dt2]-lecroy_pretrigger)*1e6, segments_Scope44_APD7[seg][::dt2]/MaxD7,color=[0,0.3448,0],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D8* and D7# F 34 m')
+#plt.grid()
+#
+#plt.subplot(4,3,11)
+#MaxD5=np.max(segments_Scope44_APD5[seg])
+#MaxD4=np.max(segments_Scope43_APD4[seg])
+#plt.plot((seg_time_Scope44_APD5[::dt2]-lecroy_pretrigger)*1e6, segments_Scope44_APD5[seg][::dt2]/MaxD5,color=[1,0.1034,0.7241],linewidth=2)
+#plt.plot((seg_time_Scope43_APD4[::dt2]-lecroy_pretrigger)*1e6, segments_Scope43_APD4[seg][::dt2]/MaxD4,color=[0, 0, 0.1724],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D5* and D4# F 14 m')
+#plt.xlabel('Time ($\mu$s)')
+#plt.grid()
+#
+#plt.subplot(4,3,12)
+#MaxD2=np.max(segments_Scope43_APD2[seg])
+#MaxD1=np.max(segments_Scope43_APD1[seg])
+#plt.plot((seg_time_Scope43_APD2[::dt2]-lecroy_pretrigger)*1e6, segments_Scope43_APD2[seg][::dt2]/MaxD2,color=[1,0,0],linewidth=2)
+#plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e6, segments_Scope43_APD1[seg][::dt2]/MaxD1,color=[0, 0,1],linewidth=2)
+#plt.xlim([-20,200])
+#plt.title('D2* and D1# F 4 m')
+#plt.grid()
+#plt.show()
 
-plt.subplot(432)
-MaxD30=np.max(APD_30.data[::dt1])
-MaxD29=np.max(APD_29.data[::dt1])
-plt.plot((APD_30.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_30.data[::dt1]/MaxD30,color=[0.7241,0.3103,0.8276],linewidth=2)
-plt.plot((APD_29.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_29.data[::dt1]/MaxD29,color=[0.8276,1,0],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D30* and D29# F 900 m')
-plt.grid()
-
-plt.subplot(433)
-MaxD27=np.max(APD_27.data[::dt1])
-MaxD26=np.max(APD_26.data[::dt1])
-plt.plot((APD_27.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_27.data[::dt1]/MaxD27,color=[0.4483,0.3793,0.4828],linewidth=2)
-plt.plot((APD_26.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_26.data[::dt1]/MaxD26,color=[0.6207,0.7586,1],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D27* and D26# F 700 m')
-plt.grid()
-
-plt.subplot(434)
-MaxD24=np.max(APD_24.data[::dt1])
-MaxD23=np.max(APD_23.data[::dt1])
-plt.plot((APD_24.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_24.data[::dt1]/MaxD24,color=[0.5172,0.4483,0],linewidth=2)
-plt.plot((APD_23.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_23.data[::dt1]/MaxD23,color=[0.9655,0.5173,0.0345],linewidth=2)
-plt.xlim([-20,200])
-plt.ylabel('Normalized Luminosity (digitizer volts)')
-plt.title('D24* and D23# F 500 m')
-plt.grid()
-
-
-plt.subplot(435)
-MaxD22=np.max(APD_22.data[::dt1])
-MaxD21=np.max(APD_21.data[::dt1])
-plt.plot((APD_22.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_22.data[::dt1]/MaxD22,color=[0.5517,0.6552,0.4828],linewidth=2)
-plt.plot((APD_21.dataTime[::dt1]-yoko_pretrigger)*1e6,APD_21.data[::dt1]/MaxD21,color=[0.5,1,0.5],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D22* and D21# NF 400 m')
-plt.grid()
-
-plt.subplot(436)
-MaxD20=np.max(segments_Scope42_APD20[seg])
-MaxD19=np.max(segments_Scope42_APD19[seg])
-plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD20[seg][::dt2]/MaxD20,color=[0.5172,0.4483,0],linewidth=2)
-plt.plot((seg_time_Scope42_APD19[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD19[seg][::dt2]/MaxD19,color=[0.1379,0.1379,0.0345],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D20* and D19# F 300 m')
-plt.grid()
-
-plt.subplot(437)
-MaxD18=np.max(segments_Scope42_APD18[seg])
-MaxD17=np.max(segments_Scope42_APD17[seg])
-plt.plot((seg_time_Scope42_APD18[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD18[seg][::dt2]/MaxD18,color=[1,0.7586,0.5172],linewidth=2)
-plt.plot((seg_time_Scope42_APD17[::dt2]-lecroy_pretrigger)*1e6, segments_Scope42_APD17[seg][::dt2]/MaxD17,color=[0.9655,0.0690,0.3793],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D18* and D17# F 200 m')
-plt.grid()
-
-plt.subplot(438)
-MaxD15=np.max(segments_Scope50_APD15[seg])
-MaxD14=np.max(segments_Scope50_APD14[seg])
-plt.plot((seg_time_Scope50_APD15[::dt2]-lecroy_pretrigger)*1e6, segments_Scope50_APD15[seg][::dt2]/MaxD15,color=[0.8276,0.0690,1],linewidth=2)
-plt.plot((seg_time_Scope50_APD14[::dt2]-lecroy_pretrigger)*1e6, segments_Scope50_APD14[seg][::dt2]/MaxD14,color=[0.9655,0.6207,0.8621],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D15* and D14# F 94 m')
-plt.grid()
-
-plt.subplot(439)
-MaxD11=np.max(segments_Scope48_APD11[seg])
-MaxD10=np.max(segments_Scope48_APD10[seg])
-plt.plot((seg_time_Scope48_APD11[::dt2]-lecroy_pretrigger)*1e6, segments_Scope48_APD11[seg][::dt2]/MaxD11,color=[0,0.5172,0.5862],linewidth=2)
-plt.plot((seg_time_Scope48_APD10[::dt2]-lecroy_pretrigger)*1e6, segments_Scope48_APD10[seg][::dt2]/MaxD10,color=[0,1,0.7586],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D11* and D10# F 54 m')
-plt.grid()
-
-plt.subplot(4,3,10)
-MaxD8=np.max(segments_Scope44_APD8[seg])
-MaxD7=np.max(segments_Scope44_APD7[seg])
-plt.plot((seg_time_Scope44_APD8[::dt2]-lecroy_pretrigger)*1e6, segments_Scope44_APD8[seg][::dt2]/MaxD8,color=[0.5172,0.5172,1],linewidth=2)
-plt.plot((seg_time_Scope44_APD7[::dt2]-lecroy_pretrigger)*1e6, segments_Scope44_APD7[seg][::dt2]/MaxD7,color=[0,0.3448,0],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D8* and D7# F 34 m')
-plt.grid()
-
-plt.subplot(4,3,11)
-MaxD5=np.max(segments_Scope44_APD5[seg])
-MaxD4=np.max(segments_Scope43_APD4[seg])
-plt.plot((seg_time_Scope44_APD5[::dt2]-lecroy_pretrigger)*1e6, segments_Scope44_APD5[seg][::dt2]/MaxD5,color=[1,0.1034,0.7241],linewidth=2)
-plt.plot((seg_time_Scope43_APD4[::dt2]-lecroy_pretrigger)*1e6, segments_Scope43_APD4[seg][::dt2]/MaxD4,color=[0, 0, 0.1724],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D5* and D4# F 14 m')
-plt.xlabel('Time ($\mu$s)')
-plt.grid()
-
-plt.subplot(4,3,12)
-MaxD2=np.max(segments_Scope43_APD2[seg])
-MaxD1=np.max(segments_Scope43_APD1[seg])
-plt.plot((seg_time_Scope43_APD2[::dt2]-lecroy_pretrigger)*1e6, segments_Scope43_APD2[seg][::dt2]/MaxD2,color=[1,0,0],linewidth=2)
-plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e6, segments_Scope43_APD1[seg][::dt2]/MaxD1,color=[0, 0,1],linewidth=2)
-plt.xlim([-20,200])
-plt.title('D2* and D1# F 4 m')
-plt.grid()
-plt.show()
+ofile.close()
