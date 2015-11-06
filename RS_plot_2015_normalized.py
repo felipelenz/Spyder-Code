@@ -10,18 +10,18 @@ from noise_analysis import noise_analysis
 matplotlib.rcParams.update({'font.size': 20})
 
 date=82015
-seg=2
-RS_number=3
+seg=0
+RS_number=1
 M_comp_number=1
-t0=0.058495
-event=37
-suffix26=4 #lecroy last digit og the .trc file name
-suffix41=4 #yoko Last digit of the .wvf file name
-suffix42=4 #lecroy last digit og the .trc file name
-suffix43=4 #lecroy last digit og the .trc file name
-suffix44=4 #lecroy last digit og the .trc file name
-suffix48=4 #lecroy last digit og the .trc file name
-suffix50=4 #lecroy last digit og the .trc file name
+t0=0
+event=32
+suffix26=2 #lecroy last digit og the .trc file name
+suffix41=2 #yoko Last digit of the .wvf file name
+suffix42=2 #lecroy last digit og the .trc file name
+suffix43=2 #lecroy last digit og the .trc file name
+suffix44=2 #lecroy last digit og the .trc file name
+suffix48=2 #lecroy last digit og the .trc file name
+suffix50=2 #lecroy last digit og the .trc file name
 offset=0.5
 duplicate_delay=0#6.37252e-6
 
@@ -309,50 +309,58 @@ mywriter.writerow(['Diode 2 to Diode 18 speed at 20%',\
                    'Diode 2 10-90% risetime'])
 
 def allspeeds(x1,y1,x2,y2,fs1,fs2,t0,z1,z2,t_IRIG):
-    
+    propagation_delay=np.sqrt(z1*z1+293*293)/2.99e8-np.sqrt(z2*z2+293*293)/2.99e8
+    print("propagation delay=",propagation_delay)
+        
     t_10p_x1, t_20p_x1, t_50p_x1, t_80p_x1, t_90p_x1, x1_RT,xx1,yy1=noise_analysis(x1,y1,fs1,t0)
     print("waveform 1 10-90%% risetime=",x1_RT)
     t_10p_x2, t_20p_x2, t_50p_x2, t_80p_x2, t_90p_x2, x2_RT,xx2,yy2=noise_analysis(x2,y2,fs2,t0)
     print("waveform 2 10-90%% risetime=",x2_RT)
     
-    v_10p=(z1-z2)/(t_10p_x1+t_IRIG-t_10p_x2)
+    v_10p=(z1-z2)/(t_10p_x1+t_IRIG-t_10p_x2-propagation_delay)
     print("upward RS speed (measured at 10%%) = %r" %(v_10p))
     
-    v_20p=(z1-z2)/(t_20p_x1+t_IRIG-t_20p_x2)
+    v_20p=(z1-z2)/(t_20p_x1+t_IRIG-t_20p_x2-propagation_delay)
     print("upward RS speed (measured at 20%%) = %r" %(v_20p))
     
-    v_50p=(z1-z2)/(t_50p_x1+t_IRIG-t_50p_x2)
+    v_50p=(z1-z2)/(t_50p_x1+t_IRIG-t_50p_x2-propagation_delay)
     print("upward RS speed (measured at 50%%) = %r" %(v_50p))
     
-    v_80p=(z1-z2)/(t_80p_x1+t_IRIG-t_80p_x2)
+    v_80p=(z1-z2)/(t_80p_x1+t_IRIG-t_80p_x2-propagation_delay)
     print("upward RS speed (measured at 80%%) = %r" %(v_80p))
     
-    v_90p=(z1-z2)/(t_90p_x1+t_IRIG-t_90p_x2)
+    v_90p=(z1-z2)/(t_90p_x1+t_IRIG-t_90p_x2-propagation_delay)
     print("upward RS speed (measured at 90%%) = %r" %(v_90p))
     
     mywriter.writerow([v_20p, v_50p, v_80p, x1_RT, x2_RT])
     return xx1,yy1,xx2,yy2
 
 
-##For M-Components, uncomment the moving average data! 
-##########################
-## Moving Average Filter #
-##########################
-#def movingaverage(interval, window_size):
-#    window= np.ones(int(window_size))/float(window_size)
-#    return np.convolve(interval, window, 'same')
+#For M-Components, uncomment the moving average data! 
+#########################
+# Moving Average Filter #
+#########################
+def movingaverage(interval, window_size):
+    window= np.ones(int(window_size))/float(window_size)
+    return np.convolve(interval, window, 'same')
 
 #!!!!!!!!!!APD 2014!!!!!!!!!!!!
 #D2 to D18
+segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
+segments_Scope42_APD18[seg]=movingaverage(segments_Scope42_APD18[seg],100)
+
+seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
+seg_time_Scope42_APD18=movingaverage(seg_time_Scope42_APD18,100)
+
 waveforms=allspeeds(seg_time_Scope42_APD18,segments_Scope42_APD18[seg], \
-                    seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,200,4,duplicate_delay)
+                    seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,205.9,1,duplicate_delay)
 
 plt.plot((waveforms[0])*1e3,waveforms[1])
 plt.plot((waveforms[2])*1e3,waveforms[3])
 plt.legend(['Diode 18 (200 m)','Diode 2 (4 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Uncalibrated M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Uncalibrated Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
 plt.show()
 
@@ -360,12 +368,18 @@ plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
 plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
 plt.legend(['Diode 18 (200 m)','Diode 2 (4 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Normalized M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Normalized Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
 plt.show()
 
 #D22 to D32
+APD_32.dataTime=movingaverage(APD_32.dataTime,100)
+APD_22.dataTime=movingaverage(APD_22.dataTime,100)
+
+APD_32.data=movingaverage(APD_32.data,100)
+APD_22.data=movingaverage(APD_22.data,100)
+
 mywriter.writerow(['Diode 22 to Diode 32 speed at 20%',\
                    'Diode 22 to Diode 32 speed at 50%',\
                    'Diode 22 to Diode 32 speed at 80%',\
@@ -373,14 +387,14 @@ mywriter.writerow(['Diode 22 to Diode 32 speed at 20%',\
                    'Diode 22 10-90% risetime'])
 #it is very important to include -t0 below, otherwise the noise analysis won't work
 waveforms=allspeeds(APD_32.dataTime-t0,APD_32.data, \
-                    APD_22.dataTime-t0,APD_22.data,100e6,100e6,0,1000,400,duplicate_delay)
+                    APD_22.dataTime-t0,APD_22.data,100e6,100e6,0,935,426.3,duplicate_delay)
 
 plt.plot((waveforms[0])*1e3,waveforms[1])
 plt.plot((waveforms[2])*1e3,waveforms[3])
 plt.legend(['Diode 32 (1 km)','Diode 22 (400 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Uncalibrated M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Uncalibrated Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
 plt.show()
 
@@ -388,27 +402,34 @@ plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
 plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
 plt.legend(['Diode 32 (1 km)','Diode 22 (400 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Normalized M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Normalized Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
 plt.show()
 
 #!!!!!!!!!!APD 2015!!!!!!!!!!!!
 #D1 to D17
+
+seg_time_Scope42_APD17=movingaverage(seg_time_Scope42_APD17,100)
+segments_Scope42_APD17[seg]=movingaverage(segments_Scope42_APD17[seg],100)
+
+seg_time_Scope43_APD2=movingaverage(seg_time_Scope43_APD2,100)
+segments_Scope43_APD2[seg]=movingaverage(segments_Scope43_APD2[seg],100)
+
 mywriter.writerow(['Diode 1 to Diode 17 speed at 20%',\
                    'Diode 1 to Diode 17 speed at 50%',\
                    'Diode 1 to Diode 17 speed at 80%',\
                    'Diode 17 10-90% risetime',\
                    'Diode 1 10-90% risetime'])
 waveforms=allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
-                    seg_time_Scope43_APD2,segments_Scope43_APD2[seg],100e6,100e6,0,200,4,duplicate_delay)
+                    seg_time_Scope43_APD2,segments_Scope43_APD2[seg],100e6,100e6,0,191.7,1,duplicate_delay)
 
 plt.plot((waveforms[0])*1e3,waveforms[1])
 plt.plot((waveforms[2])*1e3,waveforms[3])
 plt.legend(['Diode 17 (200 m)','Diode 1 (4 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Uncalibrated M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Uncalibrated Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
 plt.show()
 
@@ -416,109 +437,43 @@ plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
 plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
 plt.legend(['Diode 17 (200 m)','Diode 1 (4 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Normalized M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Normalized Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
 plt.show()
 
-#D23 to D31
-mywriter.writerow(['Diode 23 to Diode 31 speed at 20%',\
-                   'Diode 23 to Diode 31 speed at 50%',\
-                   'Diode 23 to Diode 31 speed at 80%',\
+#D21 to D31
+APD_31.dataTime=movingaverage(APD_31.dataTime,100)
+APD_21.dataTime=movingaverage(APD_21.dataTime,100)
+
+APD_32.data=movingaverage(APD_32.data,100)
+APD_22.data=movingaverage(APD_22.data,100)
+
+mywriter.writerow(['Diode 21 to Diode 31 speed at 20%',\
+                   'Diode 21 to Diode 31 speed at 50%',\
+                   'Diode 21 to Diode 31 speed at 80%',\
                    'Diode 31 10-90% risetime',\
-                   'Diode 23 10-90% risetime'])
+                   'Diode 21 10-90% risetime'])
 #it is very important to include -t0 below, otherwise the noise analysis won't work
 waveforms=allspeeds(APD_31.dataTime-t0,APD_31.data, \
-                    APD_23.dataTime-t0,APD_23.data,100e6,100e6,0,1000,500,duplicate_delay)
+                    APD_21.dataTime-t0,APD_21.data,100e6,100e6,0,1002,387.4,duplicate_delay)
 
 plt.plot((waveforms[0])*1e3,waveforms[1])
 plt.plot((waveforms[2])*1e3,waveforms[3])
-plt.legend(['Diode 31 (1 km)','Diode 23 (500 m)'], loc=0)
+plt.legend(['Diode 31 (1 km)','Diode 21 (400 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Uncalibrated M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Uncalibrated Luminosity')
+plt.title('Event UF15-'+str(event)+', RS #'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
 plt.show()
 
 plt.plot((waveforms[0])*1e3,waveforms[1]/np.max(waveforms[1]))
 plt.plot((waveforms[2])*1e3,waveforms[3]/np.max(waveforms[3]))
-plt.legend(['Diode 32 (1 km)','Diode 23 (4500 m)'], loc=0)
+plt.legend(['Diode 31 (1 km)','Diode 21 (400 m)'], loc=0)
 plt.xlabel('Time (ms)')
-plt.ylabel('Normalized M-component Luminosity')
-plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number)+', M-comp #'+str(M_comp_number))
+plt.ylabel('Normalized Luminosity')
+plt.title('Event UF15-'+str(event)+', RS#'+str(RS_number))#+', M-comp #'+str(M_comp_number))
 plt.grid()
-plt.show()
-
-###Diode 1 (4 m) to Diode 9 (44 m) speed        
-#segments_Scope48_APD9[seg]=movingaverage(segments_Scope48_APD9[seg],100)
-#seg_time_Scope48_APD9=movingaverage(seg_time_Scope48_APD9,100)##Diode 1 (4 m) to Diode 32 (14k m) speed  
-#APD_32.data=movingaverage(APD_32.data,100)
-#APD_32.dataTime=movingaverage(APD_32.dataTime,100)
-#
-#segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
-#seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
-
-#
-#segments_Scope43_APD1[seg]=movingaverage(segments_Scope43_APD1[seg],100)
-#seg_time_Scope43_APD1=movingaverage(seg_time_Scope43_APD1,100)
-#
-#allspeeds(seg_time_Scope48_APD9,segments_Scope48_APD9[seg], \
-#        seg_time_Scope43_APD1,segments_Scope43_APD1[seg],100e6,100e6,0,44,4,0)
-#   
-##Diode 9 (44 m) to Diode 14 (94 m) speed         
-#mywriter.writerow(['Diode 9 to Diode 14 speed at 20%',\
-#                   'Diode 9 to Diode 14 speed at 50%',\
-#                   'Diode 9 to Diode 14 speed at 80%',\
-#                   'Diode 14 10-90%% risetime',\
-#                   'Diode 9 10-90%% risetime'])
-#segments_Scope50_APD14[seg]=movingaverage(segments_Scope50_APD14[seg],100)
-#seg_time_Scope50_APD14=movingaverage(seg_time_Scope50_APD14,100)
-# 
-#allspeeds(seg_time_Scope50_APD14,segments_Scope50_APD14[seg], \
-#            seg_time_Scope48_APD9,segments_Scope48_APD9[seg],100e6,100e6,0,94,44,0)
-#            
-##Diode 14 (94 m) to Diode 17 (200 m) speed          
-#mywriter.writerow(['Diode 14 to Diode 17 speed at 20%',\
-#                   'Diode 14 to Diode 17 speed at 50%',\
-#                   'Diode 14 to Diode 17 speed at 80%',\
-#                   'Diode 17 10-90% risetime',\
-#                   'Diode 14 10-90% risetime'])
-#
-#segments_Scope42_APD17[seg]=movingaverage(segments_Scope42_APD17[seg],100)
-#seg_time_Scope42_APD17=movingaverage(seg_time_Scope42_APD17,100)
-#
-#allspeeds(seg_time_Scope42_APD17,segments_Scope42_APD17[seg], \
-#            seg_time_Scope50_APD14,segments_Scope50_APD14[seg],100e6,100e6,0,200,94,0)
-#
-##Diode 21 400 m Diode 25 (600 m) speed
-#mywriter.writerow(['Diode 21 to Diode 25 speed at 20%',\
-#                   'Diode 21 to Diode 25 speed at 50%',\
-#                   'Diode 21 to Diode 25 speed at 80%',\
-#                   'Diode 25 10-90% risetime',\
-#                   'Diode 21 10-90% risetime'])
-#APD_25.data=movingaverage(APD_25.data,100)
-#APD_25.dataTime=movingaverage(APD_25.dataTime,100)
-#
-#APD_21.data=movingaverage(APD_21.data,100)
-#APD_21.dataTime=movingaverage(APD_21.dataTime,100)  
-#
-#allspeeds(APD_25.dataTime,APD_25.data, \
-#        APD_21.dataTime,APD_21.data,100e6,100e6,t0,600,400,duplicate_delay)
-#
-##Diode 25 (600 m) to Diode 32 (1 km) speed
-#mywriter.writerow(['Diode 25 to Diode 32 speed at 20%',\
-#                   'Diode 25 to Diode 32 speed at 50%',\
-#                   'Diode 25 to Diode 32 speed at 80%',\
-#                   'Diode 32 10-90% risetime',\
-#                   'Diode 25 10-90% risetime'])
-#APD_32.data=movingaverage(APD_32.data,100)
-#APD_32.dataTime=movingaverage(APD_32.dataTime,100)
-#
-#allspeeds(APD_32.dataTime,APD_32.data, \
-#        APD_25.dataTime,APD_25.data,100e6,100e6,t0,1000,600,duplicate_delay)
-
-plt.plot((APD_32.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_32.data[::dt1]/np.max(APD_32.data[::dt1]),color=[0.8,0.8,0.3],linewidth=2)
-plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD1[seg][::dt2]/np.max(segments_Scope43_APD1[seg][::dt2]),color=[0, 0, 1],linewidth=2)
 plt.show()
 
 ##!!!!!!!!!!!!!!!!Compare 2014 and 2015 diodes looking at the same channel height!!!!!!!!!!!!!!!!!!
