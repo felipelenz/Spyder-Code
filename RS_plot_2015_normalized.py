@@ -9,30 +9,30 @@ import matplotlib
 from noise_analysis import noise_analysis
 matplotlib.rcParams.update({'font.size': 20})
 
-date=82715
-seg=1
-RS_number=2
+date=82015
+seg=2
+RS_number=3
 M_comp_number=1
-t0=0.228686
-event=43
-suffix26=5 #lecroy last digit og the .trc file name
-suffix41=5 #yoko Last digit of the .wvf file name
-suffix42=5 #lecroy last digit og the .trc file name
-suffix43=5 #lecroy last digit og the .trc file name
-suffix44=5 #lecroy last digit og the .trc file name
-suffix48=5 #lecroy last digit og the .trc file name
-suffix50=5 #lecroy last digit og the .trc file name
+t0=0.058495
+event=37
+suffix26=4 #lecroy last digit og the .trc file name
+suffix41=4 #yoko Last digit of the .wvf file name
+suffix42=4 #lecroy last digit og the .trc file name
+suffix43=4 #lecroy last digit og the .trc file name
+suffix44=4 #lecroy last digit og the .trc file name
+suffix48=4 #lecroy last digit og the .trc file name
+suffix50=4 #lecroy last digit og the .trc file name
 offset=0.5
 duplicate_delay=0#6.37252e-6
 
 dt1=1
 dt2=1
 
-#Current (from scope 26)
-lecroy_fileName_IIHI = "/Volumes/2015 Data/0"+str(date)+"/Scope26/C1AC0000"+str(suffix26)+".trc"
-lecroy_IIHI = lc.lecroy_data(lecroy_fileName_IIHI)
-seg_time_IIHI = lecroy_IIHI.get_seg_time()
-segments_IIHI = lecroy_IIHI.get_segments()
+##Current (from scope 26)
+#lecroy_fileName_IIHI = "/Volumes/2015 Data/0"+str(date)+"/Scope26/C1AC0000"+str(suffix26)+".trc"
+#lecroy_IIHI = lc.lecroy_data(lecroy_fileName_IIHI)
+#seg_time_IIHI = lecroy_IIHI.get_seg_time()
+#segments_IIHI = lecroy_IIHI.get_segments()
 
 #Yoko
 yoko_fileName = "/Volumes/2015 Data/0"+str(date)+"/Scope41/APD000"+str(suffix41)
@@ -180,46 +180,46 @@ APD_31=f.get_trace_data(header,11,t0,tf)
 APD_32=f.get_trace_data(header,12,t0,tf)
 APD_20=f.get_trace_data(header,13,t0,tf)
 
-#plt.plot((APD_32.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_32.data[::dt1]/np.max(APD_32.data[::dt1])+31*offset,color=[0.8,0.8,0.3],linewidth=2)
-#plt.plot((APD_31.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_31.data[::dt1]/np.max(APD_31.data[::dt1])+30*offset,color=[0.2414,0,0.1034],linewidth=2)
-#plt.plot((APD_30.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_30.data[::dt1]/np.max(APD_30.data[::dt1])+29*offset,color=[0.7241,0.3103,0.8276],linewidth=2)
-#plt.plot((APD_29.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_29.data[::dt1]/np.max(APD_29.data[::dt1])+28*offset,color=[0.8276,1,0],linewidth=2)
-#plt.plot((APD_28.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_28.data[::dt1]/np.max(APD_28.data[::dt1])+27*offset,color=[0.6207,0,0],linewidth=2)
-#plt.plot((APD_27.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_27.data[::dt1]/np.max(APD_27.data[::dt1])+26*offset,color=[0.4483,0.3793,0.4828],linewidth=2)
-#plt.plot((APD_26.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_26.data[::dt1]/np.max(APD_26.data[::dt1])+25*offset,color=[0.6207,0.7586,1],linewidth=2)
-#plt.plot((APD_25.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_25.data[::dt1]/np.max(APD_25.data[::dt1])+24*offset,color=[0.4483,0.9655,1],linewidth=2)
-#plt.plot((APD_24.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_24.data[::dt1]/np.max(APD_24.data[::dt1])+23*offset,color=[0.5172,0.4483,0],linewidth=2)
-#plt.plot((APD_23.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_23.data[::dt1]/np.max(APD_23.data[::dt1])+22*offset,color=[0.9655,0.5173,0.0345],linewidth=2)
-#plt.plot((APD_22.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_22.data[::dt1]/np.max(APD_22.data[::dt1])+21*offset,color=[0.5517,0.6552,0.4828],linewidth=2)
-#plt.plot((APD_21.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_21.data[::dt1]/np.max(APD_21.data[::dt1])+20*offset,color=[0.5,1,0.5],linewidth=2)
+plt.plot((APD_32.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_32.data[::dt1]/np.max(APD_32.data[::dt1])+31*offset,color=[0.8,0.8,0.3],linewidth=2)
+plt.plot((APD_31.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_31.data[::dt1]/np.max(APD_31.data[::dt1])+30*offset,color=[0.2414,0,0.1034],linewidth=2)
+plt.plot((APD_30.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_30.data[::dt1]/np.max(APD_30.data[::dt1])+29*offset,color=[0.7241,0.3103,0.8276],linewidth=2)
+plt.plot((APD_29.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_29.data[::dt1]/np.max(APD_29.data[::dt1])+28*offset,color=[0.8276,1,0],linewidth=2)
+plt.plot((APD_28.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_28.data[::dt1]/np.max(APD_28.data[::dt1])+27*offset,color=[0.6207,0,0],linewidth=2)
+plt.plot((APD_27.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_27.data[::dt1]/np.max(APD_27.data[::dt1])+26*offset,color=[0.4483,0.3793,0.4828],linewidth=2)
+plt.plot((APD_26.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_26.data[::dt1]/np.max(APD_26.data[::dt1])+25*offset,color=[0.6207,0.7586,1],linewidth=2)
+plt.plot((APD_25.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_25.data[::dt1]/np.max(APD_25.data[::dt1])+24*offset,color=[0.4483,0.9655,1],linewidth=2)
+plt.plot((APD_24.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_24.data[::dt1]/np.max(APD_24.data[::dt1])+23*offset,color=[0.5172,0.4483,0],linewidth=2)
+plt.plot((APD_23.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_23.data[::dt1]/np.max(APD_23.data[::dt1])+22*offset,color=[0.9655,0.5173,0.0345],linewidth=2)
+plt.plot((APD_22.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_22.data[::dt1]/np.max(APD_22.data[::dt1])+21*offset,color=[0.5517,0.6552,0.4828],linewidth=2)
+plt.plot((APD_21.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_21.data[::dt1]/np.max(APD_21.data[::dt1])+20*offset,color=[0.5,1,0.5],linewidth=2)
 
-#plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD20[seg][::dt2]/np.max(segments_Scope42_APD20[seg][::dt2])+19*offset,color=[0.5172,0.4483,0],linewidth=2)
-##plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(APD_20.data[::dt1])+19*offset,color=[0.5,1,0.5],linewidth=2)
-#plt.plot((seg_time_Scope42_APD19[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD19[seg][::dt2]/np.max(segments_Scope42_APD19[seg][::dt2])+18*offset,color=[0.1379,0.1379,0.0345],linewidth=2)
-#plt.plot((seg_time_Scope42_APD18[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD18[seg][::dt2]/np.max(segments_Scope42_APD18[seg][::dt2])+17*offset,color=[1,0.7586,0.5172],linewidth=2)
-#plt.plot((seg_time_Scope42_APD17[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD17[seg][::dt2]/np.max(segments_Scope42_APD17[seg][::dt2])+16*offset,color=[0.9655,0.0690,0.3793],linewidth=2)
-#
-#plt.plot((seg_time_Scope50_APD16[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD16[seg][::dt2]/np.max(segments_Scope50_APD16[seg][::dt2])+15*offset,color=[0.4828,0.1034,0.4138],linewidth=2)
-##plt.plot((APD_16.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_16.data[::dt1]+15*offset,color=[0.5172,0.4483,0],linewidth=2)
-#plt.plot((seg_time_Scope50_APD15[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD15[seg][::dt2]/np.max(segments_Scope50_APD15[seg][::dt2])+14*offset,color=[0.8276,0.0690,1],linewidth=2)
-#plt.plot((seg_time_Scope50_APD14[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD14[seg][::dt2]/np.max(segments_Scope50_APD14[seg][::dt2])+13*offset,color=[0.9655,0.6207,0.8621],linewidth=2)
-#plt.plot((seg_time_Scope50_APD13[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD13[seg][::dt2]/np.max(segments_Scope50_APD13[seg][::dt2])+12*offset,color=[0.5862,0.8276,0.3103],linewidth=2)
-#
-#plt.plot((seg_time_Scope48_APD12[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD12[seg][::dt2]/np.max(segments_Scope48_APD12[seg][::dt2])+11*offset,color=[0,0,0.4828],linewidth=2)
-#plt.plot((seg_time_Scope48_APD11[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD11[seg][::dt2]/np.max(segments_Scope48_APD11[seg][::dt2])+10*offset,color=[0,0.5172,0.5862],linewidth=2)
-#plt.plot((seg_time_Scope48_APD10[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD10[seg][::dt2]/np.max(segments_Scope48_APD10[seg][::dt2])+9*offset,color=[0,1,0.7586],linewidth=2)
-#plt.plot((seg_time_Scope48_APD9[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD9[seg][::dt2]/np.max(segments_Scope48_APD9[seg][::dt2])+8*offset,color=[0.6207,0.3103,0.2759],linewidth=2)
-#
-#plt.plot((seg_time_Scope44_APD8[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD8[seg][::dt2]/np.max(segments_Scope44_APD8[seg][::dt2])+7*offset,color=[0.5172,0.5172,1],linewidth=2)
-#plt.plot((seg_time_Scope44_APD7[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD7[seg][::dt2]/np.max(segments_Scope44_APD7[seg][::dt2])+6*offset,color=[0,0.3448,0],linewidth=2)
-#plt.plot((seg_time_Scope44_APD6[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD6[seg][::dt2]/np.max(segments_Scope44_APD6[seg][::dt2])+5*offset,color=[ 1,0.8276,0],linewidth=2)
-#plt.plot((seg_time_Scope44_APD5[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD5[seg][::dt2]/np.max(segments_Scope44_APD5[seg][::dt2])+4*offset,color=[1,0.1034,0.7241],linewidth=2)
-#
-#plt.plot((seg_time_Scope43_APD4[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD4[seg][::dt2]/np.max(segments_Scope43_APD4[seg][::dt2])+3*offset,color=[0, 0, 0.1724],linewidth=2)
-#plt.plot((seg_time_Scope43_APD3[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD3[seg][::dt2]/np.max(segments_Scope43_APD3[seg][::dt2])+2*offset,color=[0, 1, 0],linewidth=2)
-#plt.plot((seg_time_Scope43_APD2[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD2[seg][::dt2]/np.max(segments_Scope43_APD2[seg][::dt2])+1*offset,color=[1, 0, 0],linewidth=2)
-#plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD1[seg][::dt2]/np.max(segments_Scope43_APD1[seg][::dt2])+0*offset,color=[0, 0, 1],linewidth=2)
-#
+plt.plot((seg_time_Scope42_APD20[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD20[seg][::dt2]/np.max(segments_Scope42_APD20[seg][::dt2])+19*offset,color=[0.5172,0.4483,0],linewidth=2)
+#plt.plot((APD_20.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_20.data[::dt1]/np.max(APD_20.data[::dt1])+19*offset,color=[0.5,1,0.5],linewidth=2)
+plt.plot((seg_time_Scope42_APD19[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD19[seg][::dt2]/np.max(segments_Scope42_APD19[seg][::dt2])+18*offset,color=[0.1379,0.1379,0.0345],linewidth=2)
+plt.plot((seg_time_Scope42_APD18[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD18[seg][::dt2]/np.max(segments_Scope42_APD18[seg][::dt2])+17*offset,color=[1,0.7586,0.5172],linewidth=2)
+plt.plot((seg_time_Scope42_APD17[::dt2]-lecroy_pretrigger)*1e3, segments_Scope42_APD17[seg][::dt2]/np.max(segments_Scope42_APD17[seg][::dt2])+16*offset,color=[0.9655,0.0690,0.3793],linewidth=2)
+
+plt.plot((seg_time_Scope50_APD16[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD16[seg][::dt2]/np.max(segments_Scope50_APD16[seg][::dt2])+15*offset,color=[0.4828,0.1034,0.4138],linewidth=2)
+#plt.plot((APD_16.dataTime[::dt1]-yoko_pretrigger)*1e3,APD_16.data[::dt1]+15*offset,color=[0.5172,0.4483,0],linewidth=2)
+plt.plot((seg_time_Scope50_APD15[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD15[seg][::dt2]/np.max(segments_Scope50_APD15[seg][::dt2])+14*offset,color=[0.8276,0.0690,1],linewidth=2)
+plt.plot((seg_time_Scope50_APD14[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD14[seg][::dt2]/np.max(segments_Scope50_APD14[seg][::dt2])+13*offset,color=[0.9655,0.6207,0.8621],linewidth=2)
+plt.plot((seg_time_Scope50_APD13[::dt2]-lecroy_pretrigger)*1e3, segments_Scope50_APD13[seg][::dt2]/np.max(segments_Scope50_APD13[seg][::dt2])+12*offset,color=[0.5862,0.8276,0.3103],linewidth=2)
+
+plt.plot((seg_time_Scope48_APD12[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD12[seg][::dt2]/np.max(segments_Scope48_APD12[seg][::dt2])+11*offset,color=[0,0,0.4828],linewidth=2)
+plt.plot((seg_time_Scope48_APD11[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD11[seg][::dt2]/np.max(segments_Scope48_APD11[seg][::dt2])+10*offset,color=[0,0.5172,0.5862],linewidth=2)
+plt.plot((seg_time_Scope48_APD10[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD10[seg][::dt2]/np.max(segments_Scope48_APD10[seg][::dt2])+9*offset,color=[0,1,0.7586],linewidth=2)
+plt.plot((seg_time_Scope48_APD9[::dt2]-lecroy_pretrigger)*1e3, segments_Scope48_APD9[seg][::dt2]/np.max(segments_Scope48_APD9[seg][::dt2])+8*offset,color=[0.6207,0.3103,0.2759],linewidth=2)
+
+plt.plot((seg_time_Scope44_APD8[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD8[seg][::dt2]/np.max(segments_Scope44_APD8[seg][::dt2])+7*offset,color=[0.5172,0.5172,1],linewidth=2)
+plt.plot((seg_time_Scope44_APD7[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD7[seg][::dt2]/np.max(segments_Scope44_APD7[seg][::dt2])+6*offset,color=[0,0.3448,0],linewidth=2)
+plt.plot((seg_time_Scope44_APD6[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD6[seg][::dt2]/np.max(segments_Scope44_APD6[seg][::dt2])+5*offset,color=[ 1,0.8276,0],linewidth=2)
+plt.plot((seg_time_Scope44_APD5[::dt2]-lecroy_pretrigger)*1e3, segments_Scope44_APD5[seg][::dt2]/np.max(segments_Scope44_APD5[seg][::dt2])+4*offset,color=[1,0.1034,0.7241],linewidth=2)
+
+plt.plot((seg_time_Scope43_APD4[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD4[seg][::dt2]/np.max(segments_Scope43_APD4[seg][::dt2])+3*offset,color=[0, 0, 0.1724],linewidth=2)
+plt.plot((seg_time_Scope43_APD3[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD3[seg][::dt2]/np.max(segments_Scope43_APD3[seg][::dt2])+2*offset,color=[0, 1, 0],linewidth=2)
+plt.plot((seg_time_Scope43_APD2[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD2[seg][::dt2]/np.max(segments_Scope43_APD2[seg][::dt2])+1*offset,color=[1, 0, 0],linewidth=2)
+plt.plot((seg_time_Scope43_APD1[::dt2]-lecroy_pretrigger)*1e3, segments_Scope43_APD1[seg][::dt2]/np.max(segments_Scope43_APD1[seg][::dt2])+0*offset,color=[0, 0, 1],linewidth=2)
+
 #plt.plot((seg_time_IIHI[::dt2]-lecroy_pretrigger/2)*1e3, segments_IIHI[seg][::dt2]/np.max(segments_IIHI[seg][::dt2])-1*offset,color=[0.3, 0.3, 0.3],linewidth=2)
 
 #plt.xlabel('Time (ms)')
