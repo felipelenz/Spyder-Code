@@ -151,7 +151,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope50_D16 = lc.lecroy_data(lecroy_fileName_Scope50_APD16)
     D16_time = scope50_D16.get_seg_time()
     D16_data = scope50_D16.get_segments()
-    D16_data=D16_data[seg]*1.64
+    D16_data=D16_data[seg]*1.64/10
     
     plt.plot((D16_time-5e-3)*1e6,D16_data+offset,label='D16# (500 m)')
     
@@ -163,7 +163,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope39_D18 = lc.lecroy_data(lecroy_fileName_Scope39_APD18)
     D18_time = scope39_D18.get_seg_time()
     D18_data = scope39_D18.get_segments()
-    D18_data=D18_data[seg]*0.78
+    D18_data=D18_data[seg]*0.78/10
     
     plt.plot((D18_time-5e-3)*1e6,D18_data+offset,label='D18# (550 m)')
     
@@ -175,7 +175,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope39_D19 = lc.lecroy_data(lecroy_fileName_Scope39_APD19)
     D19_time = scope39_D19.get_seg_time()
     D19_data = scope39_D19.get_segments()
-    D19_data=D19_data[seg]*1.97
+    D19_data=D19_data[seg]*1.97/10
     
     plt.plot((D19_time-5e-3)*1e6,D19_data+offset,label='D19# (600 m)')
     
@@ -187,7 +187,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope42_D21 = lc.lecroy_data(lecroy_fileName_Scope42_APD21)
     D21_time = scope42_D21.get_seg_time()
     D21_data = scope42_D21.get_segments()
-    D21_data=D21_data[seg]*1.64
+    D21_data=D21_data[seg]*1.64/10
     
     plt.plot((D21_time-5e-3)*1e6,D21_data+offset,label='D21# (650 m)')
     
@@ -199,7 +199,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope42_D22 = lc.lecroy_data(lecroy_fileName_Scope42_APD22)
     D22_time = scope42_D22.get_seg_time()
     D22_data = scope42_D22.get_segments()
-    D22_data=D22_data[seg]*0.82
+    D22_data=D22_data[seg]*0.82/10
     
     plt.plot((D22_time-5e-3)*1e6,D22_data+offset,label='D22# (700 m)')
     
@@ -211,7 +211,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope42_D24 = lc.lecroy_data(lecroy_fileName_Scope42_APD24)
     D24_time = scope42_D24.get_seg_time()
     D24_data = scope42_D24.get_segments()
-    D24_data=D24_data[seg]*0.82
+    D24_data=D24_data[seg]*0.82/10
     
     plt.plot((D24_time-5e-3)*1e6,D24_data+offset,label='D24# (750 m)')
     
@@ -223,7 +223,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope37_D25 = lc.lecroy_data(lecroy_fileName_Scope37_APD25)
     D25_time = scope37_D25.get_seg_time()
     D25_data = scope37_D25.get_segments()
-    D25_data=D25_data[seg]*0.95
+    D25_data=D25_data[seg]*0.95/10
     
     plt.plot((D25_time-5e-3)*1e6,D25_data+offset,label='D25# (800 m)')
     
@@ -235,7 +235,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope37_D27 = lc.lecroy_data(lecroy_fileName_Scope37_APD27)
     D27_time = scope37_D27.get_seg_time()
     D27_data = scope37_D27.get_segments()
-    D27_data=D27_data[seg]*0.89
+    D27_data=D27_data[seg]*0.89/10
     
     plt.plot((D27_time-5e-3)*1e6,D27_data+offset,label='D27# (850 m)')
     
@@ -247,7 +247,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope37_D28 = lc.lecroy_data(lecroy_fileName_Scope37_APD28)
     D28_time = scope37_D28.get_seg_time()
     D28_data = scope37_D28.get_segments()
-    D28_data=D28_data[seg]*0.98
+    D28_data=D28_data[seg]*0.98/10
     
     plt.plot((D28_time-5e-3)*1e6,D28_data+offset,label='D28# (900 m)')
     
@@ -259,7 +259,7 @@ def RS_plot_2016_diodes15(date,event,seg,RS_number,suffix):
     scope29_D30 = lc.lecroy_data(lecroy_fileName_Scope29_APD30)
     D30_time = scope29_D30.get_seg_time()
     D30_data = scope29_D30.get_segments()
-    D30_data=D30_data[seg]*0.91
+    D30_data=D30_data[seg]*0.91/10
     
     plt.plot((D30_time-5e-3)*1e6,D30_data+offset,label='D30# (1 km)')
     
