@@ -81,7 +81,7 @@ def RS_plot_2016_diodes14(date,event,seg,RS_number,suffix):
     scope39_D17 = lc.lecroy_data(lecroy_fileName_Scope39_APD17)
     D17_time = scope39_D17.get_seg_time()
     D17_data = scope39_D17.get_segments()
-    D17_data = D17_data[seg]*1.34
+    D17_data = D17_data[seg]*1.34/10
     plt.plot((D17_time-5e-3)*1e6,D17_data+offset,label='D17 (500 m)')
     
     offset=offset+np.max(D17_data)
@@ -92,7 +92,7 @@ def RS_plot_2016_diodes14(date,event,seg,RS_number,suffix):
     scope39_D20 = lc.lecroy_data(lecroy_fileName_Scope39_APD20)
     D20_time = scope39_D20.get_seg_time()
     D20_data = scope39_D20.get_segments()
-    D20_data=D20_data[seg]*0.76
+    D20_data=D20_data[seg]*0.76/10
     
     plt.plot((D20_time-5e-3)*1e6,D20_data+offset,label='D20 (600 m)')
     
@@ -104,7 +104,7 @@ def RS_plot_2016_diodes14(date,event,seg,RS_number,suffix):
     scope42_D23 = lc.lecroy_data(lecroy_fileName_Scope42_APD23)
     D23_time = scope42_D23.get_seg_time()
     D23_data = scope42_D23.get_segments()
-    D23_data=D23_data[seg]*1.54
+    D23_data=D23_data[seg]*1.54/10
     
     plt.plot((D23_time-5e-3)*1e6,D23_data+offset,label='D23 (700 m)')
     
@@ -116,7 +116,7 @@ def RS_plot_2016_diodes14(date,event,seg,RS_number,suffix):
     scope37_D26 = lc.lecroy_data(lecroy_fileName_Scope37_APD26)
     D26_time = scope37_D26.get_seg_time()
     D26_data = scope37_D26.get_segments()
-    D26_data=D26_data[seg]*1.44
+    D26_data=D26_data[seg]*1.44/10
     
     plt.plot((D26_time-5e-3)*1e6,D26_data+offset,label='D26 (800 m)')
     
@@ -128,7 +128,7 @@ def RS_plot_2016_diodes14(date,event,seg,RS_number,suffix):
     scope29_D29 = lc.lecroy_data(lecroy_fileName_Scope29_APD29)
     D29_time = scope29_D29.get_seg_time()
     D29_data = scope29_D29.get_segments()
-    D29_data=D29_data[seg]*1.80
+    D29_data=D29_data[seg]*1.80/10
     
     plt.plot((D29_time-5e-3)*1e6,D29_data+offset,label='D29 (900 m)')
     
@@ -140,7 +140,7 @@ def RS_plot_2016_diodes14(date,event,seg,RS_number,suffix):
     scope29_D31 = lc.lecroy_data(lecroy_fileName_Scope29_APD31)
     D31_time = scope29_D31.get_seg_time()
     D31_data = scope29_D31.get_segments()
-    D31_data=D31_data[seg]*1.78
+    D31_data=D31_data[seg]*1.78/10
     
     plt.plot((D31_time-5e-3)*1e6,D31_data+offset,label='D31 (1 km)')
     
